@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: file:"
+    />
+    <title>小狗的小屋</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="brand">
+          <span class="brand-icon">⌂</span>
+          <div>
+            <strong>小狗的小屋</strong
+            ><span class="eyebrow">PUPPY COMPANION</span>
+          </div>
+        </div>
+        <div class="online"><i></i> 陪伴进行中</div>
+      </header>
+      <main>
+        <section class="welcome">
+          <div>
+            <div class="eyebrow">A LITTLE FRIEND, ALWAYS HERE</div>
+            <h1>小小一只，<br />陪你好好过每一天<span>。</span></h1>
+            <p>工作也好，发呆也好。<br />你的小狗，一直在这里。</p>
+            <button class="primary" id="greet">摸摸小狗 <span>♡</span></button>
+          </div>
+          <div class="portrait">
+            <div class="orbit"></div>
+            <span class="spark one">✧</span><span class="spark two">✧</span
+            ><img
+              id="hero"
+              src="assets/placeholder.svg"
+              alt="待添加本地素材"
+            /><span class="pet-label" id="current">见面摇摇</span>
+          </div>
+        </section>
+        <section class="moods">
+          <div class="section-heading">
+            <h2>今天，是什么心情？</h2>
+            <span>待添加本地素材 · 萌宠为线条小狗</span>
+          </div>
+          <div id="actions" class="action-grid"></div>
+        </section>
+        <section class="preferences">
+          <div class="size-setting">
+            <h2>刚刚好的陪伴</h2>
+            <span class="subtle">选一个舒服的大小</span>
+            <div id="sizes" class="segmented">
+              <button data-size="160">小小只</button
+              ><button data-size="220">刚刚好</button
+              ><button data-size="300">大抱抱</button>
+            </div>
+          </div>
+          <div class="toggles">
+            <label
+              ><span>自己换换心情<small>每 45 秒换个动作</small></span
+              ><input type="checkbox" id="auto" role="switch" /></label
+            ><label
+              ><span>始终在最上面<small>打开其他窗口也能看见</small></span
+              ><input type="checkbox" id="topmost" role="switch" /></label
+            ><label
+              ><span>小狗悄悄话<small>切换动作时说一句话</small></span
+              ><input type="checkbox" id="bubbles" role="switch"
+            /></label>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <span>拖动小狗换位置 · 右键打开菜单</span
+        ><button id="return">回去陪你 ↗</button>
+      </footer>
+    </div>
+    <script src="panel.js"></script>
+  </body>
+</html>

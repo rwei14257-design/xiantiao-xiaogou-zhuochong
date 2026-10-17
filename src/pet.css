@@ -1,0 +1,100 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+  font-family: "Microsoft YaHei UI", sans-serif;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+#bubble {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: auto;
+  padding: 10px 14px;
+  border: 1px solid #e9e2d8;
+  border-radius: 15px 15px 15px 4px;
+  color: #655c4e;
+  background: #fffdf8;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+#bubble.visible {
+  opacity: 1;
+}
+#stage {
+  width: calc(100% - 32px);
+  position: relative;
+  aspect-ratio: 1;
+  margin-bottom: 24px;
+}
+#pet {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: grab;
+  -webkit-user-drag: none;
+  outline: none;
+}
+#pet:active {
+  cursor: grabbing;
+}
+#pet:focus-visible {
+  outline: 2px dashed #968067;
+  border-radius: 50%;
+}
+#tools {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #e8e2d8;
+  border-radius: 20px;
+  background: #fffdf8f5;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+#stage:hover #tools,
+#stage:focus-within #tools {
+  opacity: 1;
+}
+button {
+  border: 0;
+  width: 29px;
+  height: 25px;
+  border-radius: 13px;
+  background: transparent;
+  color: #756653;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 20px;
+}
+button:hover {
+  background: #ece7dc;
+}
+button:focus-visible {
+  outline: 2px solid #718069;
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: file:"
+    />
+    <title>小狗陪伴</title>
+    <link rel="stylesheet" href="pet.css" />
+  </head>
+  <body>
+    <div id="bubble" role="status">今天也陪着你呀。</div>
+    <main id="stage">
+      <img id="pet" draggable="false" alt="桌面陪伴角色" tabindex="0" />
+      <div id="tools">
+        <button id="home" title="打开小狗的小屋" aria-label="打开小狗的小屋">
+          ⌂</button
+        ><button id="love" title="给你爱心" aria-label="给你爱心">♡</button
+        ><button id="more" title="更多选项" aria-label="更多选项">···</button>
+      </div>
+    </main>
+    <script src="pet.js"></script>
+  </body>
+</html>

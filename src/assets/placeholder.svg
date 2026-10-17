@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>尚未加载本地素材</title>
+  <rect x="45" y="55" width="150" height="130" rx="24" fill="#edf0e7" stroke="#a1af94" stroke-width="2" stroke-dasharray="6 6"/>
+  <rect x="85" y="83" width="70" height="55" rx="8" fill="none" stroke="#819575" stroke-width="3"/>
+  <circle cx="104" cy="99" r="6" fill="#a6b694"/>
+  <path d="M90 131 L111 112 L125 123 L139 107 L150 120" fill="none" stroke="#819575" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M111 159 H129 M120 150 V168" stroke="#819575" stroke-width="3" stroke-linecap="round"/>
+</svg>
