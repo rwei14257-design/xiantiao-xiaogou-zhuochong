@@ -79,7 +79,14 @@ function importArtwork(source, destination) {
   for (const item of plan) {
     const target = path.join(destination, `${item.id}.${item.ext}`);
     fs.writeFileSync(target + ".tmp", item.bytes);
-    fs.renameSync(target + ".tmp", target);
+    try {
+      fs.renameSync(target + ".tmp", target);
+    } catch (error) {
+      if (error.code !== "EXDEV") throw error;
+      // Some encrypted or redirected Windows folders cannot rename atomically.
+      fs.copyFileSync(target + ".tmp", target);
+      fs.unlinkSync(target + ".tmp");
+    }
     for (const ext of extensions)
       if (ext !== item.ext)
         fs.rmSync(path.join(destination, `${item.id}.${ext}`), { force: true });

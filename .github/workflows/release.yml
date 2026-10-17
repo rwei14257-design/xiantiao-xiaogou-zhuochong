@@ -8,7 +8,7 @@ permissions:
   contents: read
 concurrency:
   group: installers-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   build:
     strategy:
