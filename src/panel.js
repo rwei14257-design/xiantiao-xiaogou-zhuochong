@@ -22,8 +22,15 @@ function receive(state) {
       image.alt = "";
       image.draggable = false;
       const label = document.createElement("span");
+      label.className = "action-name";
       label.textContent = action.name;
-      button.append(image, label);
+      image.alt = `${action.name}的小狗形态`;
+      const description = document.createElement("span");
+      description.className = "action-description";
+      description.textContent = action.text;
+      const timing = document.createElement("span");
+      timing.className = "action-timing";
+      button.append(image, label, description, timing);
       button.title = action.text;
       button.onclick = () => window.puppy.action(action.id);
       document.querySelector("#actions").append(button);
@@ -51,6 +58,23 @@ function receive(state) {
     hero.dataset.action = current.id;
   }
   document.querySelector("#current").textContent = current.name;
+  hero.alt = `${current.name}的小狗形态`;
+  for (const item of state.actions) {
+    const entries = state.activity.timeline.filter((e) => e.action === item.id);
+    const labels = {
+      hello: `${state.times.wake} 早安 · 闲暇陪伴`,
+      read: `工作日 09:00–${state.times.offwork}`,
+      jump: "工作日整点前伸展 · 也可点选",
+      heart: "点击互动 · 2 分钟后回到作息",
+      good: "点击鼓励 · 2 分钟后回到作息",
+      dance: "点击起舞 · 2 分钟后回到作息",
+      celebrate: "点击庆祝 · 2 分钟后回到作息",
+    };
+    document.querySelector(
+      `[data-action="${item.id}"] .action-timing`,
+    ).textContent =
+      labels[item.id] || entries.map((e) => `${e.time} ${e.title}`).join(" / ");
+  }
   if (displayedRevision !== state.artworkRevision) {
     for (const item of state.actions)
       document.querySelector(`button[data-action="${item.id}"] img`).src =

@@ -2,27 +2,29 @@
 
 **跟着你的作息，一起吃饭、休息、认真生活。**
 
-非官方 Windows / macOS 桌面陪伴应用。目标萌宠一直是线条小狗；角色图片由使用者自行提供，仓库和安装包不附带未获授权的角色素材。
+非官方 Windows / macOS 桌面陪伴应用。目标萌宠一直是线条小狗；运行用角色图片由使用者自行提供，安装包不附带角色素材。下方展示导入本地素材后的实际效果。
 
 [下载安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest) · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
 
-![小狗的一天：默认作息时间线](docs/images/day-rhythm.svg)
+![导入线条小狗后的真实小屋界面](docs/images/preview-home.png)
 
-上图及下面的图鉴是本项目绘制的**功能示意**，不包含线条小狗角色图像，也不冒充角色动画预览。未导入素材时，应用显示相应状态图标，导入后才显示你的线条小狗。
+截图展示的是已导入本地线条小狗素材的应用，下载后需自行导入才能获得同样的角色效果。截图中的角色形象归相应权利人所有，**不属于本项目 MIT 授权范围**；项目未取得角色公开展示或再分发授权，也不将截图展示视为已获授权。详见 [截图来源与权利说明](docs/screenshots.md)。
+
+![小狗的一天：默认作息时间线](docs/images/day-rhythm.svg)
 
 ## 下载与安装
 
-| 设备 | v1.1.1 安装包 |
+| 设备 | v1.1.2 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.1/Puppy-Companion-1.1.1-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.1/Puppy-Companion-1.1.1-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.1/Puppy-Companion-1.1.1-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
 Windows：运行安装程序，按提示选择安装目录。Mac：打开 DMG，将应用拖入 Applications。首次启动会打开小屋，引导导入本地素材。
 
-Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Apple Developer ID 签名和公证。系统可能提示无法验证发布者；请确认下载来源和校验值，按系统提供的安全设置流程处理，不需要关闭系统整体防护。Mac 安装包已安排原生构建，完整实机交互体验仍需反馈。
+Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Apple Developer ID 签名和公证。系统可能提示无法验证发布者；请确认下载来源和校验值，按系统提供的安全设置流程处理，不需要关闭系统整体防护。Mac 安装包在对应平台原生构建，完整实机交互体验仍需反馈。
 
 ## 它会怎样陪你
 
@@ -37,7 +39,9 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 
 ## 每个状态会做什么
 
-![12 种状态功能图鉴](docs/images/states.svg)
+![12 种状态对应的线条小狗形态](docs/images/preview-states.png)
+
+每张卡片对应一个实际动作：小狗形态、状态名称、陪伴文案和触发时间放在一起。小屋中的 GIF 会播放，以上截图为静态展示；卡片时间会随个人作息设置更新。
 
 | 状态 | 默认触发方式 | 行为和恢复规则 | 本地文件名 |
 | --- | --- | --- | --- |
@@ -108,7 +112,7 @@ npm run dist:mac   # 在 Mac 构建 ARM64 / Intel DMG
 
 本项目为非官方学习和交流项目，与线条小狗相关权利人不存在已确认的合作、赞助或授权关系。项目名称用于说明学习参考主题，不主张第三方角色或标识权利。
 
-本项目未取得线条小狗角色素材的公开再分发授权，因此仓库、功能图示及安装包不附带这些素材。**免责声明、非商业目的和侵删承诺均不能替代事先授权。**
+本项目未取得线条小狗角色素材的公开再分发授权，安装包不附带原始角色素材；文档包含两张导入本地素材后的功能截图，截图内第三方角色的公开展示权尚未取得确认。**免责声明、非商业目的和侵删承诺均不能替代事先授权。**
 
 本项目有权许可的代码、文档和功能图示采用 [MIT License](LICENSE)；第三方角色、商标、用户素材和依赖组件按各自权利与许可处理。完整说明：[NOTICE](NOTICE.md) · [素材政策](ASSET_POLICY.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
 

@@ -18,6 +18,8 @@ const special = new Set([
   "src/assets/placeholder.svg",
   "docs/images/day-rhythm.svg",
   "docs/images/states.svg",
+  "docs/images/preview-home.png",
+  "docs/images/preview-states.png",
 ]);
 for (const a of require("../src/model").actions)
   special.add(`src/assets/states/${a.id}.svg`);

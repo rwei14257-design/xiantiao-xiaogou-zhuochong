@@ -17,6 +17,8 @@ assets-local/
 *.7z
 *.gif
 *.png
+!docs/images/preview-home.png
+!docs/images/preview-states.png
 *.jpg
 *.jpeg
 *.webp

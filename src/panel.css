@@ -338,8 +338,8 @@ h2 {
 }
 .action-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 9px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 .action-card {
   position: relative;
@@ -349,7 +349,7 @@ h2 {
   border: 1px solid #e6e7df;
   border-radius: 12px;
   background: #fcfbf8;
-  padding: 2px 8px 10px;
+  padding: 12px 10px 14px;
   color: #72796b;
   font-size: 11px;
   transition:
@@ -357,9 +357,32 @@ h2 {
     border-color 0.15s;
 }
 .action-card img {
-  width: 72px;
-  height: 65px;
+  width: 160px;
+  height: 140px;
+  max-width: 100%;
   object-fit: contain;
+}
+.action-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #53634b;
+  margin-top: 5px;
+}
+.action-description {
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 7px 0 10px;
+  color: #89917f;
+}
+.action-timing {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #77896a;
+  border-top: 1px solid #e7eadf;
+  padding-top: 9px;
+  margin-top: auto;
+  width: 100%;
+  min-height: 31px;
 }
 .action-card:hover {
   border-color: #adbda0;
@@ -477,6 +500,9 @@ footer button {
   font-size: 11px;
 }
 @media (max-width: 760px) {
+  .action-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .app {
     padding: 0 23px;
   }
