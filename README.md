@@ -108,7 +108,7 @@ npm run dist:win   # 在 Windows 构建 NSIS 安装包
 npm run dist:mac   # 在 Mac 构建 ARM64 / Intel DMG
 ```
 
-图示来自 `scripts/generate-illustrations.js`；`npm run docs:images` 可重新生成。作息逻辑在 `src/schedule.js`，素材读取和导入在 `src/artwork.js`。打包采用 `electron-builder.yml` 的文件白名单，并在 CI 检查应用包不含用户角色图片。
+功能示意图来自 `scripts/generate-illustrations.js`；`npm run docs:images` 可重新生成这些示意图，不会修改合照应用图标或界面截图。作息逻辑在 `src/schedule.js`，素材读取和导入在 `src/artwork.js`。打包采用 `electron-builder.yml` 的文件白名单，CI 仅允许已登记的两个运行时图标，不允许用户动画素材进入应用包。
 
 ## 版权、免责声明与致谢
 
