@@ -1,0 +1,73 @@
+name: Build installers
+on:
+  push:
+    branches: [main]
+    paths: [package.json, .github/workflows/release.yml, electron-builder.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: installers-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+            arch: x64
+          - os: macos-15-intel
+            target: mac
+            arch: x64
+          - os: macos-15
+            target: mac
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check:release
+      - name: Build official-runtime package
+        run: npx electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - name: Check packaged app contents
+        run: node scripts/check-package.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.target }}-${{ matrix.arch }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: installer-*
+          merge-multiple: true
+          path: release-assets
+      - name: Publish installers and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          test -f "release-assets/Puppy-Companion-${VERSION}-Windows-x64-Setup.exe"
+          test -f "release-assets/Puppy-Companion-${VERSION}-macOS-arm64.dmg"
+          test -f "release-assets/Puppy-Companion-${VERSION}-macOS-x64.dmg"
+          (cd release-assets && sha256sum *.exe *.dmg > SHA256SUMS.txt)
+          gh release create "v${VERSION}" release-assets/* --target "$GITHUB_SHA" --title "v${VERSION} · 小狗的一天" --notes-file "docs/releases/v${VERSION}.md" --latest

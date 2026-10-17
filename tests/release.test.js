@@ -13,7 +13,7 @@ test("Missing external artwork uses a bundled placeholder for every action", () 
     for (const a of actions)
       assert.equal(
         path.basename(fileURLToPath(resolveArtwork(a.id, empty))),
-        "placeholder.svg",
+        `${a.id}.svg`,
       );
   } finally {
     fs.rmdirSync(empty);

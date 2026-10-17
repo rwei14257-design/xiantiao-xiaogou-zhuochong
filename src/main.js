@@ -6,12 +6,15 @@ const {
   Tray,
   Menu,
   nativeImage,
+  dialog,
+  shell,
+  powerMonitor,
 } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { actions, normalize, clampBounds } = require("./model");
-const { withArtwork, createTrayIcon } = require("./artwork");
-const artwork = withArtwork();
+const { withArtwork, createTrayIcon, importArtwork } = require("./artwork");
+const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
 const artifactsPath = path.resolve(__dirname, "../artifacts");
 const smoke = process.argv.includes("--smoke-test");
 app.setName("小狗陪伴");
@@ -22,7 +25,17 @@ app.setPath(
     smoke ? "PuppyCompanion-Code-Smoke" : "PuppyCompanion-Code",
   ),
 );
-app.setAppUserModelId("local.puppy.companion.code");
+if (process.platform === "win32")
+  app.setAppUserModelId("local.puppy.companion.code");
+const assetDirectory = path.join(app.getPath("userData"), "pet-assets");
+let artwork = withArtwork(
+  smoke || app.isPackaged
+    ? [assetDirectory]
+    : [assetDirectory, path.resolve(__dirname, "../assets-local")],
+);
+let artworkRevision = 0,
+  manual = null,
+  lastActivityKey = "";
 const settingsPath = path.join(app.getPath("userData"), "settings.json");
 let state;
 try {
@@ -51,8 +64,13 @@ function save() {
   }, 150);
 }
 function snapshot() {
+  const activity = getActivity(new Date(), state, manual);
   return {
     ...state,
+    action: activity.action,
+    activity,
+    artworkRevision,
+    suppliedCount: artwork.filter((a) => a.supplied).length,
     actions: artwork,
     visible: Boolean(pet?.isVisible()),
     version: app.getVersion(),
@@ -65,6 +83,7 @@ function publish() {
 function action(id) {
   if (!actions.some((a) => a.id === id)) return snapshot();
   state.action = id;
+  manual = { action: id, until: Date.now() + MANUAL_HOLD_MS };
   publish();
   save();
   return snapshot();
@@ -108,12 +127,18 @@ function hidePet() {
 function updateSettings(patch) {
   if (!patch || typeof patch !== "object") return snapshot();
   const safe = Object.fromEntries(
-    ["size", "auto", "topmost", "bubbles"]
+    ["size", "auto", "topmost", "bubbles", "times"]
       .filter((k) => k in patch)
       .map((k) => [k, patch[k]]),
   );
   const old = state.size;
+  if ("times" in safe)
+    safe.times = {
+      ...state.times,
+      ...(safe.times && typeof safe.times === "object" ? safe.times : {}),
+    };
   state = normalize({ ...state, ...safe });
+  if ("auto" in safe || "times" in safe) manual = null;
   if (old !== state.size) {
     const b = pet.getBounds();
     const next = boundsFor({
@@ -138,7 +163,7 @@ function menu() {
       submenu: actions.map((a) => ({
         label: a.name,
         type: "radio",
-        checked: state.action === a.id,
+        checked: snapshot().action === a.id,
         click: () => action(a.id),
       })),
     },
@@ -156,11 +181,13 @@ function menu() {
       })),
     },
     {
-      label: "自动换动作",
+      label: "跟随每日作息",
       type: "checkbox",
       checked: state.auto,
       click: (item) => updateSettings({ auto: item.checked }),
     },
+    { label: "回到当前作息", enabled: state.auto, click: resumeSchedule },
+    { label: "导入本地素材…", click: () => chooseArtwork().catch(reportError) },
     {
       label: "始终在最上面",
       type: "checkbox",
@@ -181,6 +208,44 @@ function secure(w) {
   w.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   w.webContents.on("will-navigate", (e) => e.preventDefault());
 }
+function reportError(error) {
+  dialog.showErrorBox("小狗陪伴", error.message || String(error));
+}
+function resumeSchedule() {
+  manual = null;
+  state.auto = true;
+  tick();
+  publish();
+  save();
+  return snapshot();
+}
+function tick() {
+  if (!pet || pet.isDestroyed() || dragTimer) return;
+  const activity = getActivity(new Date(), state, manual);
+  if (activity.key !== lastActivityKey) {
+    lastActivityKey = activity.key;
+    publish();
+  }
+}
+async function chooseArtwork() {
+  const result = await dialog.showOpenDialog(panel || pet, {
+    title: "选择你有权使用的线条小狗素材文件夹",
+    properties: ["openDirectory"],
+  });
+  if (result.canceled || !result.filePaths[0]) return { canceled: true };
+  const imported = importArtwork(result.filePaths[0], assetDirectory);
+  artwork = withArtwork(
+    app.isPackaged
+      ? [assetDirectory]
+      : [assetDirectory, path.resolve(__dirname, "../assets-local")],
+  );
+  artworkRevision++;
+  publish();
+  return {
+    ...imported,
+    suppliedCount: artwork.filter((a) => a.supplied).length,
+  };
+}
 function openPanel() {
   if (panel && !panel.isDestroyed()) {
     panel.show();
@@ -189,7 +254,7 @@ function openPanel() {
   }
   panel = new BrowserWindow({
     width: 860,
-    height: 850,
+    height: Math.min(920, screen.getPrimaryDisplay().workArea.height - 30),
     minWidth: 720,
     minHeight: 630,
     show: false,
@@ -231,6 +296,23 @@ ipcMain.handle("action", (e, id) => (trusted(e) ? action(id) : null));
 ipcMain.handle("settings", (e, patch) =>
   trusted(e) ? updateSettings(patch) : null,
 );
+ipcMain.handle("resume-schedule", (e) =>
+  trusted(e) ? resumeSchedule() : null,
+);
+ipcMain.handle("import-assets", async (e) => {
+  if (!trusted(e)) return null;
+  try {
+    return await chooseArtwork();
+  } catch (error) {
+    return { error: error.message };
+  }
+});
+ipcMain.handle("open-assets", async (e) => {
+  if (!trusted(e)) return null;
+  fs.mkdirSync(assetDirectory, { recursive: true });
+  const error = await shell.openPath(assetDirectory);
+  return { error: error || null };
+});
 ipcMain.on("panel", (e) => {
   if (trusted(e)) openPanel();
 });
@@ -277,6 +359,7 @@ else {
   app
     .whenReady()
     .then(async () => {
+      if (process.platform === "darwin") app.dock?.hide();
       Menu.setApplicationMenu(null);
       pet = new BrowserWindow({
         ...boundsFor(state.position),
@@ -290,6 +373,7 @@ else {
         maximizable: false,
         minimizable: false,
         hasShadow: false,
+        roundedCorners: false,
         webPreferences: {
           preload: path.join(__dirname, "preload.js"),
           contextIsolation: true,
@@ -299,6 +383,8 @@ else {
         },
       });
       secure(pet);
+      if (process.platform === "darwin")
+        pet.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
       pet.setAlwaysOnTop(state.topmost, "floating");
       pet.on("blur", stopDrag);
       pet.on("close", (e) => {
@@ -317,22 +403,19 @@ else {
       tray.on("click", showPet);
       await pet.loadFile(path.join(__dirname, "pet.html"));
       showPet();
+      if (!artwork.some((a) => a.supplied) && !smoke) openPanel();
       screen.on("display-removed", () => {
         const b = boundsFor(state.position);
         pet.setBounds(b);
         state.position = { x: b.x, y: b.y };
         save();
       });
-      autoTimer = setInterval(() => {
-        if (!state.auto || !pet.isVisible() || dragTimer) return;
-        const hour = new Date().getHours();
-        const pool =
-          hour >= 23 || hour < 7
-            ? ["sleep", "read"]
-            : ["hello", "read", "drink", "good", "jump"];
-        const choices = pool.filter((id) => id !== state.action);
-        action(choices[Math.floor(Math.random() * choices.length)]);
-      }, 45000);
+      tick();
+      autoTimer = setInterval(tick, 1000);
+      powerMonitor.on("resume", () => {
+        manual = null;
+        tick();
+      });
       if (smoke) {
         try {
           await require("./smoke-test")({

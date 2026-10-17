@@ -25,10 +25,13 @@
       <main>
         <section class="welcome">
           <div>
-            <div class="eyebrow">A LITTLE FRIEND, ALWAYS HERE</div>
-            <h1>小小一只，<br />陪你好好过每一天<span>。</span></h1>
-            <p>工作也好，发呆也好。<br />你的小狗，一直在这里。</p>
+            <div class="eyebrow">A DAY WITH YOUR LITTLE FRIEND</div>
+            <h1>把平凡的一天，<br />过成小狗的日常<span>。</span></h1>
+            <p id="activity-description">
+              跟着你的作息，一起吃饭、休息、认真生活。
+            </p>
             <button class="primary" id="greet">摸摸小狗 <span>♡</span></button>
+            <button class="text-button" id="resume">回到作息 ↺</button>
           </div>
           <div class="portrait">
             <div class="orbit"></div>
@@ -40,12 +43,53 @@
             /><span class="pet-label" id="current">见面摇摇</span>
           </div>
         </section>
+        <section class="day-card" aria-label="小狗的每日作息">
+          <div class="day-heading">
+            <div>
+              <span class="eyebrow">RIGHT NOW</span>
+              <h2 id="activity-title">当前作息</h2>
+              <p id="activity-time">正在读取时间</p>
+            </div>
+            <div class="next-up">
+              <span>接下来</span><strong id="next-event">—</strong
+              ><small id="mode-label">跟随本地时间</small>
+            </div>
+          </div>
+          <div id="timeline" class="timeline"></div>
+          <details id="schedule-editor">
+            <summary>
+              调整我的作息时间 <span>6 个时刻，跟着你的生活走</span>
+            </summary>
+            <form id="times-form">
+              <div id="time-inputs" class="time-inputs"></div>
+              <div class="schedule-footer">
+                <span id="schedule-message" role="status"
+                  >睡眠优先；短暂互动后，2 分钟自动回到作息。</span
+                ><button type="submit" class="primary">保存作息</button>
+              </div>
+            </form>
+          </details>
+        </section>
         <section class="moods">
           <div class="section-heading">
             <h2>今天，是什么心情？</h2>
-            <span>待添加本地素材 · 萌宠为线条小狗</span>
+            <span id="asset-count">线条小狗 · 12 种状态</span>
           </div>
           <div id="actions" class="action-grid"></div>
+        </section>
+        <section class="asset-bar">
+          <div>
+            <strong>让你的小狗住进来</strong>
+            <p id="asset-message">
+              选择你有权使用的 GIF / PNG / WebP 文件夹，缺少的状态会显示示意图。
+            </p>
+          </div>
+          <div class="asset-buttons">
+            <button id="import-assets" class="primary">导入本地素材</button
+            ><button id="open-assets" class="text-button">
+              打开素材目录 ↗
+            </button>
+          </div>
         </section>
         <section class="preferences">
           <div class="size-setting">
@@ -59,7 +103,7 @@
           </div>
           <div class="toggles">
             <label
-              ><span>自己换换心情<small>每 45 秒换个动作</small></span
+              ><span>跟随每日作息<small>关闭后固定当前选择的动作</small></span
               ><input type="checkbox" id="auto" role="switch" /></label
             ><label
               ><span>始终在最上面<small>打开其他窗口也能看见</small></span

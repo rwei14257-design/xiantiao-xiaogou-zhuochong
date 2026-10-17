@@ -12,11 +12,13 @@ const hit = hitCanvas.getContext("2d", { willReadFrequently: true });
 function receive(next) {
   state = next;
   const current = state.actions.find((a) => a.id === state.action);
-  if (lastAction !== current.id) {
-    lastAction = current.id;
-    img.src = current.src;
+  const key = `${state.activity.key}:${state.artworkRevision}`;
+  if (lastAction !== key) {
+    lastAction = key;
+    img.src =
+      current.src + (current.supplied ? `?v=${state.artworkRevision}` : "");
     img.alt = current.name;
-    bubble.textContent = current.text;
+    bubble.textContent = state.activity.text || current.text;
     clearTimeout(bubbleTimer);
     bubble.classList.toggle("visible", state.bubbles);
     bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), 5500);

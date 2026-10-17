@@ -16,7 +16,11 @@ const special = new Set([
   ".gitattributes",
   "LICENSE",
   "src/assets/placeholder.svg",
+  "docs/images/day-rhythm.svg",
+  "docs/images/states.svg",
 ]);
+for (const a of require("../src/model").actions)
+  special.add(`src/assets/states/${a.id}.svg`);
 function inspect(files, read) {
   const problems = [];
   for (const file of files) {

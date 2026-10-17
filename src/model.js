@@ -1,3 +1,4 @@
+const { normalizeTimes } = require("./schedule");
 const actions = [
   { id: "hello", name: "见面摇摇", text: "今天也陪着你呀。" },
   { id: "heart", name: "给你爱心", text: "一颗爱心，送给你！" },
@@ -9,6 +10,8 @@ const actions = [
   { id: "sleep", name: "呼呼大睡", text: "休息也是很重要的事。" },
   { id: "drink", name: "喝口水吧", text: "喝口水，伸个懒腰。" },
   { id: "offwork", name: "下班快乐", text: "辛苦啦，今天到这里。" },
+  { id: "sleepy", name: "睡前放松", text: "慢慢收心，准备休息啦。" },
+  { id: "celebrate", name: "完成庆祝", text: "又完成了一件事，给你鼓掌！" },
 ];
 const defaults = {
   size: 220,
@@ -25,6 +28,7 @@ function normalize(input = {}) {
     topmost:
       typeof input.topmost === "boolean" ? input.topmost : defaults.topmost,
     auto: typeof input.auto === "boolean" ? input.auto : defaults.auto,
+    times: normalizeTimes(input.times),
     bubbles:
       typeof input.bubbles === "boolean" ? input.bubbles : defaults.bubbles,
     action: actions.some((a) => a.id === input.action)

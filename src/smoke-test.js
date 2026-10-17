@@ -34,7 +34,7 @@ module.exports = async function test(api) {
       a.id,
     );
   }
-  results.push("All ten actions load using distributable fallback artwork");
+  results.push("All twelve states load using distributable diagrams");
   const sizeChecks = [];
   for (const size of [160, 300, 220]) {
     api.updateSettings({ size });
@@ -74,12 +74,12 @@ module.exports = async function test(api) {
     );
   await wait(900);
   const layout = await panel.webContents.executeJavaScript(
-    `({ cards: document.querySelectorAll('.action-card').length, loaded: [...document.images].every(i => i.complete && i.naturalWidth > 0), width: innerWidth, scrollWidth: document.documentElement.scrollWidth, footer: document.querySelector('footer').getBoundingClientRect().bottom, height: innerHeight })`,
+    `({ cards: document.querySelectorAll('.action-card').length, loaded: [...document.images].every(i => i.complete && i.naturalWidth > 0), width: innerWidth, scrollWidth: document.documentElement.scrollWidth, footer: document.querySelector('footer').getBoundingClientRect().bottom, height: innerHeight, scrollHeight: document.documentElement.scrollHeight })`,
   );
-  assert.equal(layout.cards, 10);
+  assert.equal(layout.cards, 12);
   assert.equal(layout.loaded, true);
   assert(layout.scrollWidth <= layout.width);
-  assert(layout.footer <= layout.height, JSON.stringify(layout));
+  assert(layout.footer <= layout.scrollHeight + 1, JSON.stringify(layout));
   await panel.webContents.executeJavaScript(
     'document.querySelector("[data-action=heart]").click()',
   );
@@ -91,7 +91,21 @@ module.exports = async function test(api) {
   await wait(180);
   assert(Math.abs(api.pet.getBounds().width - 192) <= 4);
   results.push(
-    "Panel renders ten cards without overflow; action and size buttons work through IPC",
+    "Panel renders twelve cards with vertical scrolling and no horizontal overflow; action and size buttons work through IPC",
+  );
+  await panel.webContents.executeJavaScript(
+    `document.querySelector('input[name="lunch"]').value='12:35'; document.querySelector('#times-form').requestSubmit();`,
+  );
+  await wait(150);
+  assert.equal(api.snapshot().times.lunch, "12:35");
+  await panel.webContents.executeJavaScript(
+    `document.querySelector('#resume').click()`,
+  );
+  await wait(150);
+  assert.equal(api.snapshot().activity.mode, "schedule");
+  api.updateSettings({ times: require("./schedule").DEFAULT_TIMES });
+  results.push(
+    "Custom schedule form saves and resume button returns to current local-time state",
   );
   api.updateSettings({ size: 220 });
   api.action("hello");
