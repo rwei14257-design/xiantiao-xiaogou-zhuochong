@@ -1,8 +1,10 @@
 # 线条小狗桌宠 · 小狗的一天
 
+<img src="resources/icons/icon.png" alt="线条小狗双狗合照应用图标" width="96" />
+
 **跟着你的作息，一起吃饭、休息、认真生活。**
 
-非官方 Windows / macOS 桌面陪伴应用。目标萌宠一直是线条小狗；运行用角色图片由使用者自行提供，安装包不附带角色素材。下方展示导入本地素材后的实际效果。
+非官方 Windows / macOS 桌面陪伴应用。目标萌宠一直是线条小狗；运行用角色图片由使用者自行提供，安装包附带双狗合照应用图标，不附带运行用的角色动画素材。下方展示导入本地素材后的实际效果。
 
 [下载安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest) · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
 
@@ -14,11 +16,11 @@
 
 ## 下载与安装
 
-| 设备 | v1.1.2 安装包 |
+| 设备 | v1.1.3 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.2/Puppy-Companion-1.1.2-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
@@ -112,9 +114,9 @@ npm run dist:mac   # 在 Mac 构建 ARM64 / Intel DMG
 
 本项目为非官方学习和交流项目，与线条小狗相关权利人不存在已确认的合作、赞助或授权关系。项目名称用于说明学习参考主题，不主张第三方角色或标识权利。
 
-本项目未取得线条小狗角色素材的公开再分发授权，安装包不附带原始角色素材；文档包含两张导入本地素材后的功能截图，截图内第三方角色的公开展示权尚未取得确认。**免责声明、非商业目的和侵删承诺均不能替代事先授权。**
+本项目未取得线条小狗角色素材的公开再分发授权，安装包附带已登记的合照应用图标，不附带原始角色动画素材；文档包含两张导入本地素材后的功能截图，截图内第三方角色的公开展示权尚未取得确认。**免责声明、非商业目的和侵删承诺均不能替代事先授权。**
 
-本项目有权许可的代码、文档和功能图示采用 [MIT License](LICENSE)；第三方角色、商标、用户素材和依赖组件按各自权利与许可处理。完整说明：[NOTICE](NOTICE.md) · [素材政策](ASSET_POLICY.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
+本项目有权许可的代码、文档和功能图示采用 [MIT License](LICENSE)；第三方角色、商标、用户素材和依赖组件按各自权利与许可处理。合照图标由本机双狗素材辅助生成，相关第三方角色权利未因此获得授权，见 [图标说明](resources/icons/README.md)。完整说明：[NOTICE](NOTICE.md) · [素材政策](ASSET_POLICY.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
 
 感谢 [remake1026/desktop-pets](https://github.com/remake1026/desktop-pets) 的桌宠交互和展示思路。开发时阅读过其参考程序，不将其未提供明确许可的代码或表情包当作已获授权的资源。本版本的可调整作息、周末节奏、互动恢复、状态图鉴与素材管理按本项目需求实现。
 

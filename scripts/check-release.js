@@ -20,6 +20,11 @@ const special = new Set([
   "docs/images/states.svg",
   "docs/images/preview-home.png",
   "docs/images/preview-states.png",
+  "src/assets/app-icon.png",
+  "src/assets/tray-icon.png",
+  "resources/icons/icon.png",
+  "resources/icons/icon.ico",
+  "resources/icons/icon.icns",
 ]);
 for (const a of require("../src/model").actions)
   special.add(`src/assets/states/${a.id}.svg`);
@@ -37,7 +42,10 @@ function inspect(files, read) {
         `${file}: file type is not approved for this source-only release`,
       );
     const bytes = read(file);
-    if (bytes.length > 1024 * 1024)
+    if (
+      bytes.length >
+      (file === "resources/icons/icon.icns" ? 2 : 1) * 1024 * 1024
+    )
       problems.push(`${file}: unexpected file size`);
     const text = bytes.toString("utf8");
     if (/data:image\/[\w.+-]+;base64,[A-Za-z0-9+/=]{200,}/i.test(text))

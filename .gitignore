@@ -23,6 +23,11 @@ assets-local/
 *.jpeg
 *.webp
 *.ico
+!src/assets/app-icon.png
+!src/assets/tray-icon.png
+!resources/icons/icon.png
+!resources/icons/icon.ico
+!resources/icons/icon.icns
 *.mp4
 *.mp3
 .DS_Store

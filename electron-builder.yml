@@ -15,11 +15,14 @@ files:
   - "!assets-local/**/*"
   - "!artifacts/**/*"
 win:
+  icon: resources/icons/icon.ico
   target:
     - target: nsis
       arch: [x64]
   artifactName: Puppy-Companion-${version}-Windows-${arch}-Setup.${ext}
 nsis:
+  installerIcon: resources/icons/icon.ico
+  uninstallerIcon: resources/icons/icon.ico
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
@@ -27,6 +30,7 @@ nsis:
   shortcutName: 线条小狗桌宠
   deleteAppDataOnUninstall: false
 mac:
+  icon: resources/icons/icon.icns
   target:
     - target: dmg
       arch: [arm64, x64]

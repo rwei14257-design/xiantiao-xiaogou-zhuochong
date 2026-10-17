@@ -200,15 +200,9 @@ header {
   display: block;
 }
 .brand-icon {
-  display: grid;
-  place-items: center;
-  width: 39px;
-  height: 39px;
-  border: 1px solid #c6cfba;
-  border-radius: 13px;
-  background: #edf0e6;
-  color: #64735d;
-  font-size: 29px;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
 }
 .eyebrow {
   font-size: 9px;

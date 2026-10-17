@@ -16,9 +16,13 @@ const archives = findArchives("dist");
 if (!archives.length) throw new Error("No packaged application archive found");
 for (const archive of archives) {
   const paths = listPackage(archive).map((p) => p.replaceAll("\\", "/"));
+  const appIcons = new Set([
+    "/src/assets/app-icon.png",
+    "/src/assets/tray-icon.png",
+  ]);
   const forbidden = paths.filter(
     (p) =>
-      /\.(gif|png|webp|jpg|jpeg|ico|mp4|mp3)$/i.test(p) ||
+      (/\.(gif|png|webp|jpg|jpeg|ico|mp4|mp3)$/i.test(p) && !appIcons.has(p)) ||
       /assets-local|pet-assets|artifacts/.test(p),
   );
   if (forbidden.length)
@@ -29,5 +33,9 @@ for (const archive of archives) {
     throw new Error("Missing schedule module");
   if (!paths.some((p) => p.endsWith("/NOTICE.md")))
     throw new Error("Missing rights notice");
-  console.log(`PASS: ${archive}, no user character artwork bundled.`);
+  for (const icon of appIcons)
+    if (!paths.includes(icon)) throw new Error(`Missing app icon: ${icon}`);
+  console.log(
+    `PASS: ${archive}, only registered app icons; no animation pack bundled.`,
+  );
 }

@@ -13,7 +13,12 @@ const {
 const fs = require("fs");
 const path = require("path");
 const { actions, normalize, clampBounds } = require("./model");
-const { withArtwork, createTrayIcon, importArtwork } = require("./artwork");
+const {
+  withArtwork,
+  createTrayIcon,
+  createAppIcon,
+  importArtwork,
+} = require("./artwork");
 const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
 const artifactsPath = path.resolve(__dirname, "../artifacts");
 const smoke = process.argv.includes("--smoke-test");
@@ -261,7 +266,7 @@ function openPanel() {
     backgroundColor: "#f7f6f2",
     title: "小狗的小屋",
     autoHideMenuBar: true,
-    icon: createTrayIcon(nativeImage),
+    icon: createAppIcon(nativeImage),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
