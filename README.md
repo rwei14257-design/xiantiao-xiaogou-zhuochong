@@ -1,6 +1,6 @@
 # 线条小狗桌宠 · 小狗的一天
 
-<img src="resources/icons/icon.png" alt="线条小狗双狗合照应用图标" width="96" />
+<a href="https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/src/assets/app-icon.png"><img src="https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/src/assets/app-icon.png" alt="线条小狗双狗合照应用图标" width="96" /></a>
 
 **跟着你的作息，一起吃饭、休息、认真生活。**
 
@@ -8,11 +8,13 @@
 
 [下载安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest) · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
 
-![导入线条小狗后的真实小屋界面](docs/images/preview-home.png)
+[![导入线条小狗后的真实小屋界面](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png)
 
 截图展示的是已导入本地线条小狗素材的应用，下载后需自行导入才能获得同样的角色效果。截图中的角色形象归相应权利人所有，**不属于本项目 MIT 授权范围**；项目未取得角色公开展示或再分发授权，也不将截图展示视为已获授权。详见 [截图来源与权利说明](docs/screenshots.md)。
 
-![小狗的一天：默认作息时间线](docs/images/day-rhythm.svg)
+[![小狗的一天：默认作息时间线](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/day-rhythm.svg)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/day-rhythm.svg)
+
+图片未显示时，可直接打开：[小屋大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png) · [12 种状态大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)。
 
 ## 下载与安装
 
@@ -41,7 +43,7 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 
 ## 每个状态会做什么
 
-![12 种状态对应的线条小狗形态](docs/images/preview-states.png)
+[![12 种状态对应的线条小狗形态](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)
 
 每张卡片对应一个实际动作：小狗形态、状态名称、陪伴文案和触发时间放在一起。小屋中的 GIF 会播放，以上截图为静态展示；卡片时间会随个人作息设置更新。
 
