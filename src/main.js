@@ -161,7 +161,7 @@ function updateSettings(patch) {
 }
 function menu() {
   return Menu.buildFromTemplate([
-    { label: "happy dog · PUPPY TIME", enabled: false },
+    { label: "happy dog", enabled: false },
     { label: "打开小狗的小屋", click: openPanel },
     { type: "separator" },
     {
@@ -265,7 +265,7 @@ function openPanel() {
     minHeight: 630,
     show: false,
     backgroundColor: "#f7f6f2",
-    title: "小狗的小屋",
+    title: "happy dog · 小狗的小屋",
     autoHideMenuBar: true,
     icon: createAppIcon(nativeImage),
     webPreferences: {
