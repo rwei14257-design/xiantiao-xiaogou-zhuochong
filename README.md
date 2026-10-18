@@ -20,11 +20,11 @@
 
 ## 下载与安装
 
-| 设备 | v1.1.3 安装包 |
+| 设备 | v1.1.4 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.3/Puppy-Companion-1.1.3-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
