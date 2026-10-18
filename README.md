@@ -1,4 +1,6 @@
-# 线条小狗桌宠 · 小狗的一天
+# xian tiao xiao gou
+
+**happy dog · 小狗的一天**
 
 <a href="https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/src/assets/app-icon.png"><img src="https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/src/assets/app-icon.png" alt="线条小狗双狗合照应用图标" width="96" /></a>
 

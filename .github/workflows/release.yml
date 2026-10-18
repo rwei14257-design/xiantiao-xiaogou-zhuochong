@@ -66,8 +66,8 @@ jobs:
         run: |
           set -euo pipefail
           VERSION=$(node -p "require('./package.json').version")
-          test -f "release-assets/Puppy-Companion-${VERSION}-Windows-x64-Setup.exe"
-          test -f "release-assets/Puppy-Companion-${VERSION}-macOS-arm64.dmg"
-          test -f "release-assets/Puppy-Companion-${VERSION}-macOS-x64.dmg"
+          test -f "release-assets/happy-dog-${VERSION}-Windows-x64-Setup.exe"
+          test -f "release-assets/happy-dog-${VERSION}-macOS-arm64.dmg"
+          test -f "release-assets/happy-dog-${VERSION}-macOS-x64.dmg"
           (cd release-assets && sha256sum *.exe *.dmg > SHA256SUMS.txt)
-          gh release create "v${VERSION}" release-assets/* --target "$GITHUB_SHA" --title "v${VERSION} · 小狗的一天" --notes-file "docs/releases/v${VERSION}.md" --latest
+          gh release create "v${VERSION}" release-assets/* --target "$GITHUB_SHA" --title "v${VERSION} · happy dog" --notes-file "docs/releases/v${VERSION}.md" --latest

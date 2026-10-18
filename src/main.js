@@ -22,7 +22,7 @@ const {
 const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
 const artifactsPath = path.resolve(__dirname, "../artifacts");
 const smoke = process.argv.includes("--smoke-test");
-app.setName("小狗陪伴");
+app.setName("happy dog");
 app.setPath(
   "userData",
   path.join(
@@ -33,10 +33,11 @@ app.setPath(
 if (process.platform === "win32")
   app.setAppUserModelId("local.puppy.companion.code");
 const assetDirectory = path.join(app.getPath("userData"), "pet-assets");
+const bundledArtwork = path.join(__dirname, "assets", "pet");
 let artwork = withArtwork(
   smoke || app.isPackaged
-    ? [assetDirectory]
-    : [assetDirectory, path.resolve(__dirname, "../assets-local")],
+    ? [assetDirectory, bundledArtwork]
+    : [assetDirectory, bundledArtwork, path.resolve(__dirname, "../assets-local")],
 );
 let artworkRevision = 0,
   manual = null,
@@ -160,7 +161,7 @@ function updateSettings(patch) {
 }
 function menu() {
   return Menu.buildFromTemplate([
-    { label: "小狗陪伴 · PUPPY TIME", enabled: false },
+    { label: "happy dog · PUPPY TIME", enabled: false },
     { label: "打开小狗的小屋", click: openPanel },
     { type: "separator" },
     {
@@ -206,7 +207,7 @@ function menu() {
     },
     { label: "回到屏幕右下角", click: resetPosition },
     { type: "separator" },
-    { label: "退出小狗陪伴", click: () => app.quit() },
+    { label: "退出happy dog", click: () => app.quit() },
   ]);
 }
 function secure(w) {
@@ -214,7 +215,7 @@ function secure(w) {
   w.webContents.on("will-navigate", (e) => e.preventDefault());
 }
 function reportError(error) {
-  dialog.showErrorBox("小狗陪伴", error.message || String(error));
+  dialog.showErrorBox("happy dog", error.message || String(error));
 }
 function resumeSchedule() {
   manual = null;
@@ -241,8 +242,8 @@ async function chooseArtwork() {
   const imported = importArtwork(result.filePaths[0], assetDirectory);
   artwork = withArtwork(
     app.isPackaged
-      ? [assetDirectory]
-      : [assetDirectory, path.resolve(__dirname, "../assets-local")],
+      ? [assetDirectory, bundledArtwork]
+      : [assetDirectory, bundledArtwork, path.resolve(__dirname, "../assets-local")],
   );
   artworkRevision++;
   publish();
@@ -399,7 +400,7 @@ else {
         }
       });
       tray = new Tray(createTrayIcon(nativeImage));
-      tray.setToolTip("小狗陪伴 · 右键管理，双击打开小屋");
+      tray.setToolTip("happy dog · 右键管理，双击打开小屋");
       tray.on("right-click", () => menu().popup());
       tray.on("double-click", () => {
         showPet();
