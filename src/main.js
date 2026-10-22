@@ -37,11 +37,17 @@ const bundledArtwork = path.join(__dirname, "assets", "pet");
 let artwork = withArtwork(
   smoke || app.isPackaged
     ? [assetDirectory, bundledArtwork]
-    : [assetDirectory, bundledArtwork, path.resolve(__dirname, "../assets-local")],
+    : [
+        assetDirectory,
+        bundledArtwork,
+        path.resolve(__dirname, "../assets-local"),
+      ],
 );
 let artworkRevision = 0,
   manual = null,
-  lastActivityKey = "";
+  lastActivityKey = "",
+  lastTickMinute = null,
+  openOnReady = false;
 const settingsPath = path.join(app.getPath("userData"), "settings.json");
 let state;
 try {
@@ -82,9 +88,10 @@ function snapshot() {
     version: app.getVersion(),
   };
 }
-function publish() {
+function publish(next = snapshot()) {
+  lastActivityKey = JSON.stringify(next.activity);
   for (const w of [pet, panel])
-    if (w && !w.isDestroyed()) w.webContents.send("state", snapshot());
+    if (w && !w.isDestroyed()) w.webContents.send("state", next);
 }
 function action(id) {
   if (!actions.some((a) => a.id === id)) return snapshot();
@@ -220,18 +227,20 @@ function reportError(error) {
 function resumeSchedule() {
   manual = null;
   state.auto = true;
-  tick();
   publish();
   save();
   return snapshot();
 }
-function tick() {
+function tick(force = false) {
   if (!pet || pet.isDestroyed() || dragTimer) return;
-  const activity = getActivity(new Date(), state, manual);
-  if (activity.key !== lastActivityKey) {
-    lastActivityKey = activity.key;
-    publish();
-  }
+  const now = Date.now();
+  const minute = Math.floor(now / 60000);
+  const expired = manual && now >= manual.until;
+  if (!force && minute === lastTickMinute && !expired) return;
+  lastTickMinute = minute;
+  if (expired) manual = null;
+  const next = snapshot();
+  if (JSON.stringify(next.activity) !== lastActivityKey) publish(next);
 }
 async function chooseArtwork() {
   const result = await dialog.showOpenDialog(panel || pet, {
@@ -243,7 +252,11 @@ async function chooseArtwork() {
   artwork = withArtwork(
     app.isPackaged
       ? [assetDirectory, bundledArtwork]
-      : [assetDirectory, bundledArtwork, path.resolve(__dirname, "../assets-local")],
+      : [
+          assetDirectory,
+          bundledArtwork,
+          path.resolve(__dirname, "../assets-local"),
+        ],
   );
   artworkRevision++;
   publish();
@@ -356,9 +369,14 @@ ipcMain.on("drag", (e, phase) => {
     pet.setPosition(p.x - dragOffset.x, p.y - dragOffset.y, false);
   }, 16);
 });
-if (!app.requestSingleInstanceLock()) app.quit();
+const ownsInstance = app.requestSingleInstanceLock();
+if (!ownsInstance) app.quit();
 else {
   app.on("second-instance", () => {
+    if (!pet || pet.isDestroyed()) {
+      openOnReady = true;
+      return;
+    }
     showPet();
     openPanel();
   });
@@ -409,7 +427,8 @@ else {
       tray.on("click", showPet);
       await pet.loadFile(path.join(__dirname, "pet.html"));
       showPet();
-      if (!artwork.some((a) => a.supplied) && !smoke) openPanel();
+      if (openOnReady || (!artwork.some((a) => a.supplied) && !smoke))
+        openPanel();
       screen.on("display-removed", () => {
         const b = boundsFor(state.position);
         pet.setBounds(b);
@@ -420,7 +439,7 @@ else {
       autoTimer = setInterval(tick, 1000);
       powerMonitor.on("resume", () => {
         manual = null;
-        tick();
+        tick(true);
       });
       if (smoke) {
         try {
@@ -453,6 +472,8 @@ else {
 }
 app.on("window-all-closed", () => {});
 app.on("before-quit", () => {
+  // A second launch must never overwrite the running instance's settings.
+  if (!ownsInstance) return;
   quitting = true;
   clearInterval(autoTimer);
   clearInterval(dragTimer);

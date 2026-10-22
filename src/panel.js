@@ -1,6 +1,6 @@
 let initialized = false;
 let displayedRevision = -1,
-  latestState;
+  displayedTimeline = "";
 const timeLabels = {
   wake: "起床",
   breakfast: "早餐",
@@ -10,7 +10,6 @@ const timeLabels = {
   bedtime: "睡觉",
 };
 function receive(state) {
-  latestState = state;
   if (!initialized) {
     initialized = true;
     for (const action of state.actions) {
@@ -102,19 +101,25 @@ function receive(state) {
         : "工作日节奏 · 系统本地时间";
   document.querySelector("#resume").hidden = state.activity.mode === "schedule";
   const timeline = document.querySelector("#timeline");
-  timeline.replaceChildren();
-  for (const entry of state.activity.timeline) {
-    const item = document.createElement("div");
-    item.className = "timeline-stop";
-    item.classList.toggle("current", entry.id === state.activity.id);
-    const time = document.createElement("span");
-    time.textContent = entry.time;
-    const title = document.createElement("strong");
-    title.textContent = entry.title;
-    item.title = `${entry.time}–${entry.end}`;
-    item.append(time, title);
-    timeline.append(item);
+  const timelineKey = JSON.stringify(state.activity.timeline);
+  if (timelineKey !== displayedTimeline) {
+    displayedTimeline = timelineKey;
+    timeline.replaceChildren();
+    for (const entry of state.activity.timeline) {
+      const item = document.createElement("div");
+      item.className = "timeline-stop";
+      item.dataset.event = entry.id;
+      const time = document.createElement("span");
+      time.textContent = entry.time;
+      const title = document.createElement("strong");
+      title.textContent = entry.title;
+      item.title = `${entry.time}–${entry.end}`;
+      item.append(time, title);
+      timeline.append(item);
+    }
   }
+  for (const item of timeline.children)
+    item.classList.toggle("current", item.dataset.event === state.activity.id);
   document.querySelectorAll("[data-action]").forEach((b) => {
     if (b.tagName === "BUTTON") {
       b.classList.toggle("selected", b.dataset.action === state.action);

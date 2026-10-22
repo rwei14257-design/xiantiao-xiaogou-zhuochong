@@ -9,14 +9,19 @@ let state,
 const hitCanvas = document.createElement("canvas");
 hitCanvas.width = hitCanvas.height = 80;
 const hit = hitCanvas.getContext("2d", { willReadFrequently: true });
+let hitPixels = new Uint8ClampedArray(80 * 80 * 4);
 function receive(next) {
   state = next;
   const current = state.actions.find((a) => a.id === state.action);
   const key = `${state.activity.key}:${state.artworkRevision}`;
   if (lastAction !== key) {
     lastAction = key;
-    img.src =
+    const source =
       current.src + (current.supplied ? `?v=${state.artworkRevision}` : "");
+    if (img.src !== source) {
+      hitPixels.fill(0);
+      img.src = source;
+    }
     img.alt = current.name;
     bubble.textContent = state.activity.text || current.text;
     clearTimeout(bubbleTimer);
@@ -28,18 +33,26 @@ function receive(next) {
 window.puppy.onState(receive);
 window.puppy.getState().then(receive);
 // Sample the GIF's current alpha channel so transparent image margins pass clicks through.
-setInterval(() => {
-  if (img.complete && img.naturalWidth) {
+function sampleHitArea() {
+  if (!state?.visible || document.hidden) return;
+  if (img.complete && img.naturalWidth && img.naturalHeight) {
     hit.clearRect(0, 0, 80, 80);
-    hit.drawImage(img, 0, 0, 80, 80);
+    // Match object-fit: contain, including the transparent letterbox margins.
+    const scale = Math.min(80 / img.naturalWidth, 80 / img.naturalHeight);
+    const width = img.naturalWidth * scale,
+      height = img.naturalHeight * scale;
+    hit.drawImage(img, (80 - width) / 2, (80 - height) / 2, width, height);
+    hitPixels = hit.getImageData(0, 0, 80, 80).data;
   }
-}, 100);
+}
+img.addEventListener("load", sampleHitArea);
+setInterval(sampleHitArea, 100);
 function opaqueAt(e) {
   const r = img.getBoundingClientRect();
   const x = Math.floor(((e.clientX - r.left) / r.width) * 80),
     y = Math.floor(((e.clientY - r.top) / r.height) * 80);
   if (x < 0 || y < 0 || x >= 80 || y >= 80) return false;
-  return hit.getImageData(x, y, 1, 1).data[3] > 20;
+  return hitPixels[(y * 80 + x) * 4 + 3] > 20;
 }
 document.addEventListener("pointermove", (e) => {
   if (

@@ -34,7 +34,23 @@ module.exports = async function test(api) {
       a.id,
     );
   }
-  results.push("All twelve states load using distributable diagrams");
+  results.push("All twelve configured state images load");
+  const hitAreas = await api.pet.webContents.executeJavaScript(`(async () => {
+    const image = document.querySelector('#pet');
+    const oldSource = image.src;
+    image.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="black"/></svg>');
+    await image.decode();
+    sampleHitArea();
+    const r = image.getBoundingClientRect();
+    const at = (x,y) => opaqueAt({clientX:r.left+r.width*x,clientY:r.top+r.height*y});
+    const result = { top: at(.5,.1), middle: at(.5,.5), bottom: at(.5,.9) };
+    image.src = oldSource;
+    await image.decode();
+    sampleHitArea();
+    return result;
+  })()`);
+  assert.deepEqual(hitAreas, { top: false, middle: true, bottom: false });
+  results.push("Wide images preserve click-through in letterbox margins");
   const sizeChecks = [];
   for (const size of [160, 300, 220]) {
     api.updateSettings({ size });
@@ -81,10 +97,19 @@ module.exports = async function test(api) {
   assert(layout.scrollWidth <= layout.width);
   assert(layout.footer <= layout.scrollHeight + 1, JSON.stringify(layout));
   await panel.webContents.executeJavaScript(
+    'window.originalTimelineStop = document.querySelector(".timeline-stop")',
+  );
+  await panel.webContents.executeJavaScript(
     'document.querySelector("[data-action=heart]").click()',
   );
   await wait(180);
   assert.equal(api.snapshot().action, "heart");
+  assert.equal(
+    await panel.webContents.executeJavaScript(
+      'window.originalTimelineStop === document.querySelector(".timeline-stop")',
+    ),
+    true,
+  );
   await panel.webContents.executeJavaScript(
     `document.querySelector('[data-size="160"]').click()`,
   );
