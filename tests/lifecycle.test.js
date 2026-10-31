@@ -38,6 +38,8 @@ function boot(ownsInstance = true) {
         };
       if (name === "path") return path;
       if (name === "./model") return model;
+      if (name === "./settings")
+        return { writeSettings: (...args) => writes.push(args) };
       if (name === "./artwork") return { withArtwork: () => [] };
       if (name === "./schedule")
         return {
@@ -67,6 +69,7 @@ function boot(ownsInstance = true) {
     testWindow: {
       isDestroyed: () => false,
       isVisible: () => true,
+      setAlwaysOnTop() {},
       webContents: { send: (_, value) => messages.push(value) },
     },
   });
@@ -126,4 +129,16 @@ test("Manual mode expires inside a minute and broadcasts one shared snapshot", (
   assert.equal(app.messages.at(-1).activity.mode, "schedule");
   assert.equal(app.messages.at(-1).action, "drink");
   assert.equal(app.messages.at(-1), app.messages.at(-2));
+});
+
+test("Pausing the schedule keeps the visible action instead of an old selection", () => {
+  const app = boot();
+  app.at("10:30:00");
+  app.run("pet = testWindow; updateSettings({auto:false})");
+  assert.equal(app.messages.at(-1).action, "drink");
+  assert.equal(app.messages.at(-1).activity.mode, "fixed");
+  app.run(
+    "updateSettings({auto:true}); action('heart'); updateSettings({auto:false})",
+  );
+  assert.equal(app.messages.at(-1).action, "heart");
 });

@@ -20,6 +20,7 @@ const {
   importArtwork,
 } = require("./artwork");
 const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
+const { writeSettings } = require("./settings");
 const artifactsPath = path.resolve(__dirname, "../artifacts");
 const smoke = process.argv.includes("--smoke-test");
 app.setName("happy dog");
@@ -68,8 +69,7 @@ function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try {
-      fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
-      fs.writeFileSync(settingsPath, JSON.stringify(state, null, 2));
+      writeSettings(settingsPath, state);
     } catch (e) {
       console.error("保存设置失败:", e.message);
     }
@@ -145,6 +145,8 @@ function updateSettings(patch) {
       .map((k) => [k, patch[k]]),
   );
   const old = state.size;
+  if (safe.auto === false && state.auto)
+    state.action = getActivity(new Date(), state, manual).action;
   if ("times" in safe)
     safe.times = {
       ...state.times,
@@ -479,8 +481,7 @@ app.on("before-quit", () => {
   clearInterval(dragTimer);
   clearTimeout(saveTimer);
   try {
-    fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
-    fs.writeFileSync(settingsPath, JSON.stringify(state, null, 2));
+    writeSettings(settingsPath, state);
   } catch {}
   tray?.destroy();
 });
