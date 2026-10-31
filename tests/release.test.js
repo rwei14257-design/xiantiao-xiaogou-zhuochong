@@ -23,7 +23,13 @@ test("User-supplied artwork resolves safely; path traversal is rejected", () => 
   const local = fs.mkdtempSync(path.join(os.tmpdir(), "pet-art-test-"));
   const candidate = path.join(local, "heart.gif");
   try {
-    fs.writeFileSync(candidate, "test fixture");
+    fs.writeFileSync(
+      candidate,
+      Buffer.from(
+        "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        "base64",
+      ),
+    );
     assert.equal(fileURLToPath(resolveArtwork("heart", local)), candidate);
     assert.throws(() => resolveArtwork("../private", local));
   } finally {

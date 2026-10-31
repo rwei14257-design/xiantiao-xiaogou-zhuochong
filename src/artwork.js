@@ -4,6 +4,23 @@ const { pathToFileURL } = require("node:url");
 const { actions } = require("./model");
 const localRoot = path.resolve(__dirname, "../assets-local");
 const extensions = ["gif", "png", "webp"];
+const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+function usableArtwork(candidate, ext) {
+  let descriptor;
+  try {
+    const stat = fs.lstatSync(candidate);
+    if (!stat.isFile() || stat.size > MAX_IMAGE_BYTES) return false;
+    descriptor = fs.openSync(candidate, "r");
+    const header = Buffer.alloc(12);
+    const length = fs.readSync(descriptor, header, 0, header.length, 0);
+    return isImage(header.subarray(0, length), ext);
+  } catch {
+    // Missing, unreadable or concurrently removed files must not prevent startup.
+    return false;
+  } finally {
+    if (descriptor !== undefined) fs.closeSync(descriptor);
+  }
+}
 const ALIASES = {
   hello: ["turn on"],
   dance: ["music-dance"],
@@ -19,8 +36,7 @@ function resolveArtwork(id, root = localRoot) {
   for (const directory of Array.isArray(root) ? root : [root]) {
     for (const ext of extensions) {
       const candidate = path.join(directory, `${id}.${ext}`);
-      if (fs.existsSync(candidate) && fs.statSync(candidate).isFile())
-        return pathToFileURL(candidate).href;
+      if (usableArtwork(candidate, ext)) return pathToFileURL(candidate).href;
     }
   }
   const illustration = path.join(__dirname, "assets/states", `${id}.svg`);
@@ -59,7 +75,7 @@ function importArtwork(source, destination) {
         const candidate = path.join(source, `${name}.${ext}`);
         if (!fs.existsSync(candidate)) continue;
         const stat = fs.lstatSync(candidate);
-        if (!stat.isFile() || stat.size > 15 * 1024 * 1024) {
+        if (!stat.isFile() || stat.size > MAX_IMAGE_BYTES) {
           skipped.push(`${name}.${ext}`);
           continue;
         }
