@@ -51,7 +51,6 @@ function eventsFor(times, weekend = false) {
       start: bed,
       duration: (wake - bed + 1440) % 1440,
       priority: 100,
-      text: "小狗睡着啦。愿你今晚也睡个好觉。",
     },
     {
       id: "winddown",
@@ -60,7 +59,6 @@ function eventsFor(times, weekend = false) {
       start: (bed - 30 + 1440) % 1440,
       duration: 30,
       priority: 90,
-      text: "给今天收个尾，慢慢准备休息。",
     },
     {
       id: "wake",
@@ -69,7 +67,6 @@ function eventsFor(times, weekend = false) {
       start: wake,
       duration: 20,
       priority: 80,
-      text: "早安，新的一天一起开始。",
     },
     {
       id: "breakfast",
@@ -78,7 +75,6 @@ function eventsFor(times, weekend = false) {
       start: minutes(t.breakfast),
       duration: 30,
       priority: 70,
-      text: "先吃点早餐，再出发。",
     },
     {
       id: "lunch",
@@ -87,7 +83,6 @@ function eventsFor(times, weekend = false) {
       start: minutes(t.lunch),
       duration: 40,
       priority: 70,
-      text: "暂停一下，午饭要好好吃。",
     },
     {
       id: "dinner",
@@ -96,7 +91,6 @@ function eventsFor(times, weekend = false) {
       start: minutes(t.dinner),
       duration: 40,
       priority: 70,
-      text: "晚饭时间到，给自己补充能量。",
     },
     {
       id: "nap",
@@ -105,7 +99,6 @@ function eventsFor(times, weekend = false) {
       start: (minutes(t.lunch) + 40) % 1440,
       duration: 20,
       priority: 60,
-      text: "闭目歇一会儿，小狗陪你充充电。",
     },
     {
       id: "offwork",
@@ -114,9 +107,6 @@ function eventsFor(times, weekend = false) {
       start: minutes(t.offwork),
       duration: 30,
       priority: 50,
-      text: weekend
-        ? "留一点时间，做自己喜欢的事。"
-        : "今天辛苦啦，准备收工吧。",
     },
     {
       id: "drink-am",
@@ -125,7 +115,6 @@ function eventsFor(times, weekend = false) {
       start: 10 * 60 + 30,
       duration: 10,
       priority: 40,
-      text: "喝口水，让眼睛也休息一下。",
     },
     {
       id: "drink-pm",
@@ -134,7 +123,6 @@ function eventsFor(times, weekend = false) {
       start: 15 * 60,
       duration: 10,
       priority: 40,
-      text: "下午好，别忘了补充水分。",
     },
   ];
 }
@@ -159,7 +147,6 @@ function scheduleState(date, times) {
       action: "jump",
       start: Math.floor(m / 60) * 60 + 55,
       duration: 5,
-      text: "起来伸伸懒腰，活动一下肩膀。",
     };
   if (!current) {
     const leisure = weekend || m >= minutes(t.offwork) || m < 9 * 60;
@@ -169,9 +156,6 @@ function scheduleState(date, times) {
       action: leisure ? "hello" : "read",
       start: null,
       duration: null,
-      text: leisure
-        ? "不用赶路，小狗陪你慢慢来。"
-        : "你专心做事，小狗安静陪着。",
     };
   }
   return { current, events, weekend, m };
@@ -237,7 +221,6 @@ function getActivity(date, settings, manual = null) {
       key: `fixed:${settings.action}`,
       title: "固定动作",
       mode: "fixed",
-      text: null,
       until: null,
     };
   if (manual && Number.isFinite(manual.until) && date.getTime() < manual.until)
@@ -248,7 +231,6 @@ function getActivity(date, settings, manual = null) {
       key: `manual:${manual.action}:${manual.until}`,
       title: "互动中 · 稍后回到作息",
       mode: "manual",
-      text: null,
       until: manual.until,
     };
   return { ...scheduled, mode: "schedule", until: null };

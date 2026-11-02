@@ -39,7 +39,7 @@ const cards = actions
   .map((a, index) => {
     const x = 32 + (index % 4) * 272,
       y = 154 + Math.floor(index / 4) * 195;
-    return `<g transform="translate(${x} ${y})"><rect width="254" height="179" rx="20" fill="#fffefa" stroke="#e0e6d6"/><g transform="translate(16 16) scale(.55)">${strokes(icons[a.id])}</g><text x="85" y="43" class="title">${a.name}</text><text x="85" y="65" class="small">${a.id}</text><text x="20" y="112" class="text">${esc(a.text)}</text><text x="20" y="146" class="small">本地素材：${a.id}.gif / png / webp</text></g>`;
+    return `<g transform="translate(${x} ${y})"><rect width="254" height="179" rx="20" fill="#fffefa" stroke="#e0e6d6"/><g transform="translate(16 16) scale(.55)">${strokes(icons[a.id])}</g><text x="85" y="43" class="title">${a.name}</text><text x="85" y="65" class="small">${a.id}</text><text x="20" y="146" class="small">本地素材：${a.id}.gif / png / webp</text></g>`;
   })
   .join("");
 fs.writeFileSync(

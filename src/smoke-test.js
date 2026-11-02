@@ -34,7 +34,13 @@ module.exports = async function test(api) {
       a.id,
     );
   }
-  results.push("All twelve configured state images load");
+  assert.equal(
+    await api.pet.webContents.executeJavaScript(
+      'document.querySelector("#tools").innerText.trim() === document.body.innerText.trim()',
+    ),
+    true,
+  );
+  results.push("All twelve state images load without dialogue");
   const hitAreas = await api.pet.webContents.executeJavaScript(`(async () => {
     const image = document.querySelector('#pet');
     const oldSource = image.src;
@@ -65,10 +71,10 @@ module.exports = async function test(api) {
     sizeChecks[1].bounds.width > sizeChecks[2].bounds.width &&
       sizeChecks[2].bounds.width > sizeChecks[0].bounds.width,
   );
-  api.updateSettings({ topmost: false, auto: false, bubbles: false });
+  api.updateSettings({ topmost: false, auto: false });
   assert.equal(api.pet.isAlwaysOnTop(), false);
   assert.equal(api.snapshot().auto, false);
-  api.updateSettings({ topmost: true, auto: true, bubbles: true });
+  api.updateSettings({ topmost: true, auto: true });
   assert.equal(api.pet.isAlwaysOnTop(), true);
   results.push("Size, always-on-top and preference toggles update");
   api.hidePet();

@@ -20,11 +20,11 @@
 
 ## 下载与安装
 
-| 设备 | v1.1.4 安装包 |
+| 设备 | v1.1.5 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.4/happy-dog-1.1.4-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
@@ -47,7 +47,7 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 
 [![12 种状态对应的线条小狗形态](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)
 
-每张卡片对应一个实际动作：小狗形态、状态名称、陪伴文案和触发时间放在一起。小屋中的 GIF 会播放，以上截图为静态展示；卡片时间会随个人作息设置更新。
+每张卡片对应一个实际动作：小狗形态、状态名称、触发时间放在一起。小屋中的 GIF 会播放，以上为旧版静态截图；v1.1.5 起只播放动作，桌面和小屋都不再显示小狗台词；卡片时间会随个人作息设置更新。
 
 | 状态 | 默认触发方式 | 行为和恢复规则 | 本地文件名 |
 | --- | --- | --- | --- |

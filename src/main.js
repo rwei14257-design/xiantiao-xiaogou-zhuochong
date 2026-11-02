@@ -140,7 +140,7 @@ function hidePet() {
 function updateSettings(patch) {
   if (!patch || typeof patch !== "object") return snapshot();
   const safe = Object.fromEntries(
-    ["size", "auto", "topmost", "bubbles", "times"]
+    ["size", "auto", "topmost", "times"]
       .filter((k) => k in patch)
       .map((k) => [k, patch[k]]),
   );

@@ -24,13 +24,9 @@ function receive(state) {
       label.className = "action-name";
       label.textContent = action.name;
       image.alt = `${action.name}的小狗形态`;
-      const description = document.createElement("span");
-      description.className = "action-description";
-      description.textContent = action.text;
       const timing = document.createElement("span");
       timing.className = "action-timing";
-      button.append(image, label, description, timing);
-      button.title = action.text;
+      button.append(image, label, timing);
       button.onclick = () => window.puppy.action(action.id);
       document.querySelector("#actions").append(button);
     }
@@ -82,8 +78,6 @@ function receive(state) {
   }
   document.querySelector("#asset-count").textContent =
     `线条小狗 · 已载入 ${state.suppliedCount} / ${state.actions.length} 个状态素材`;
-  document.querySelector("#activity-description").textContent =
-    state.activity.text || current.text;
   document.querySelector("#activity-title").textContent = state.activity.title;
   document.querySelector("#activity-time").textContent =
     state.activity.mode === "schedule"
@@ -133,7 +127,7 @@ function receive(state) {
       String(Number(b.dataset.size) === state.size),
     );
   });
-  for (const key of ["auto", "topmost", "bubbles"])
+  for (const key of ["auto", "topmost"])
     document.querySelector("#" + key).checked = state[key];
   document.querySelector(".online").lastChild.textContent = state.visible
     ? " 陪伴进行中"
@@ -148,7 +142,7 @@ document
       (b.onclick = () =>
         window.puppy.settings({ size: Number(b.dataset.size) })),
   );
-for (const key of ["auto", "topmost", "bubbles"])
+for (const key of ["auto", "topmost"])
   document.querySelector("#" + key).onchange = (e) =>
     window.puppy.settings({ [key]: e.target.checked });
 document.querySelector("#greet").onclick = () => window.puppy.action("heart");

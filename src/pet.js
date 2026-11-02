@@ -1,8 +1,6 @@
-const img = document.querySelector("#pet"),
-  bubble = document.querySelector("#bubble");
+const img = document.querySelector("#pet");
 let state,
   lastAction,
-  bubbleTimer,
   pointer,
   moving = false,
   lastIgnore;
@@ -23,12 +21,7 @@ function receive(next) {
       img.src = source;
     }
     img.alt = current.name;
-    bubble.textContent = state.activity.text || current.text;
-    clearTimeout(bubbleTimer);
-    bubble.classList.toggle("visible", state.bubbles);
-    bubbleTimer = setTimeout(() => bubble.classList.remove("visible"), 5500);
   }
-  if (!state.bubbles) bubble.classList.remove("visible");
 }
 window.puppy.onState(receive);
 window.puppy.getState().then(receive);
