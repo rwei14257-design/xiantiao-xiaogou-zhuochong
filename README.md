@@ -24,6 +24,8 @@
 - **专注搭子**：一起安静阅读 25 分钟，可提前结束；自然结束时播放庆祝动作。计时限本次运行。
 - **惊喜表情**：随机抽取爱心泡泡、流星跳跃、彩纸庆祝或闪光舞步，连续两次不重复。可额外导入 `surprise-hearts.gif`、`surprise-stars.gif`、`surprise-confetti.gif` 和 `surprise-beats.gif`（也支持 PNG/WebP）；缺少这些表情时，在常规动作上叠加粒子效果。点击互动仍保持 5 秒。
 
+[音乐联动与桌宠窗口实测记录](docs/validation-v1.2.0.md)
+
 ## 下载与安装
 
 | 设备 | v1.2.0 安装包 |
