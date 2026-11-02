@@ -60,10 +60,10 @@ function receive(state) {
       hello: `${state.times.wake} 早安 · 闲暇陪伴`,
       read: `工作日 09:00–${state.times.offwork}`,
       jump: "工作日整点前伸展 · 也可点选",
-      heart: "点击互动 · 2 分钟后回到作息",
-      good: "点击鼓励 · 2 分钟后回到作息",
-      dance: "点击起舞 · 2 分钟后回到作息",
-      celebrate: "点击庆祝 · 2 分钟后回到作息",
+      heart: "点击互动 · 自动作息下持续 5 秒",
+      good: "点击鼓励 · 自动作息下持续 5 秒",
+      dance: "点击起舞 · 自动作息下持续 5 秒",
+      celebrate: "点击庆祝 · 自动作息下持续 5 秒",
     };
     document.querySelector(
       `[data-action="${item.id}"] .action-timing`,
@@ -83,7 +83,7 @@ function receive(state) {
     state.activity.mode === "schedule"
       ? state.activity.timeLabel
       : state.activity.mode === "manual"
-        ? "互动结束后会自动回到当前作息"
+        ? "5 秒后恢复原状态"
         : "选择一个喜欢的动作，一直陪着你";
   document.querySelector("#next-event").textContent =
     `${state.activity.next.tomorrow ? "明天 " : ""}${state.activity.next.time} ${state.activity.next.title}`;
@@ -145,7 +145,7 @@ document
 for (const key of ["auto", "topmost"])
   document.querySelector("#" + key).onchange = (e) =>
     window.puppy.settings({ [key]: e.target.checked });
-document.querySelector("#greet").onclick = () => window.puppy.action("heart");
+document.querySelector("#greet").onclick = () => window.puppy.react("heart");
 document.querySelector("#return").onclick = () => window.puppy.closePanel();
 document.querySelector("#resume").onclick = () => window.puppy.resume();
 document.querySelector("#times-form").onsubmit = async (event) => {

@@ -62,6 +62,7 @@ let pet,
   dragTimer,
   dragOffset,
   autoTimer,
+  interactionTimer,
   saveTimer,
   ignoreMouse = false;
 let quitting = false;
@@ -93,12 +94,24 @@ function publish(next = snapshot()) {
   for (const w of [pet, panel])
     if (w && !w.isDestroyed()) w.webContents.send("state", next);
 }
-function action(id) {
+function endInteraction() {
+  clearTimeout(interactionTimer);
+  manual = null;
+}
+function action(id, reaction = false) {
   if (!actions.some((a) => a.id === id)) return snapshot();
-  state.action = id;
-  manual = { action: id, until: Date.now() + MANUAL_HOLD_MS };
+  endInteraction();
+  if (state.auto || reaction) {
+    manual = { action: id, until: Date.now() + MANUAL_HOLD_MS };
+    interactionTimer = setTimeout(() => {
+      endInteraction();
+      publish();
+    }, MANUAL_HOLD_MS);
+  } else {
+    state.action = id;
+    save();
+  }
   publish();
-  save();
   return snapshot();
 }
 function setMouse(ignore) {
@@ -153,7 +166,7 @@ function updateSettings(patch) {
       ...(safe.times && typeof safe.times === "object" ? safe.times : {}),
     };
   state = normalize({ ...state, ...safe });
-  if ("auto" in safe || "times" in safe) manual = null;
+  if ("auto" in safe || "times" in safe) endInteraction();
   if (old !== state.size) {
     const b = pet.getBounds();
     const next = boundsFor({
@@ -227,7 +240,7 @@ function reportError(error) {
   dialog.showErrorBox("happy dog", error.message || String(error));
 }
 function resumeSchedule() {
-  manual = null;
+  endInteraction();
   state.auto = true;
   publish();
   save();
@@ -240,7 +253,7 @@ function tick(force = false) {
   const expired = manual && now >= manual.until;
   if (!force && minute === lastTickMinute && !expired) return;
   lastTickMinute = minute;
-  if (expired) manual = null;
+  if (expired) endInteraction();
   const next = snapshot();
   if (JSON.stringify(next.activity) !== lastActivityKey) publish(next);
 }
@@ -313,7 +326,9 @@ function trusted(event) {
   );
 }
 ipcMain.handle("state", (e) => (trusted(e) ? snapshot() : null));
-ipcMain.handle("action", (e, id) => (trusted(e) ? action(id) : null));
+ipcMain.handle("action", (e, id, reaction) =>
+  trusted(e) ? action(id, reaction === true) : null,
+);
 ipcMain.handle("settings", (e, patch) =>
   trusted(e) ? updateSettings(patch) : null,
 );
@@ -440,7 +455,7 @@ else {
       tick();
       autoTimer = setInterval(tick, 1000);
       powerMonitor.on("resume", () => {
-        manual = null;
+        endInteraction();
         tick(true);
       });
       if (smoke) {
@@ -477,6 +492,7 @@ app.on("before-quit", () => {
   // A second launch must never overwrite the running instance's settings.
   if (!ownsInstance) return;
   quitting = true;
+  endInteraction();
   clearInterval(autoTimer);
   clearInterval(dragTimer);
   clearTimeout(saveTimer);

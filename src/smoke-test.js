@@ -41,6 +41,26 @@ module.exports = async function test(api) {
     true,
   );
   results.push("All twelve state images load without dialogue");
+  api.updateSettings({ auto: false });
+  api.action("sleep");
+  await api.pet.webContents.executeJavaScript(
+    'document.querySelector("#love").click()',
+  );
+  await wait(100);
+  const reaction = api.snapshot().activity;
+  assert.equal(reaction.mode, "manual");
+  assert.equal(reaction.action, "heart");
+  await wait(Math.max(0, reaction.until - Date.now()) + 150);
+  assert.equal(
+    await api.pet.webContents.executeJavaScript(
+      'document.querySelector("#pet").alt',
+    ),
+    "呼呼大睡",
+  );
+  api.updateSettings({ auto: true });
+  results.push(
+    "Click reaction expires and the pet window displays its fixed action again",
+  );
   const hitAreas = await api.pet.webContents.executeJavaScript(`(async () => {
     const image = document.querySelector('#pet');
     const oldSource = image.src;

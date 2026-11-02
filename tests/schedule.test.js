@@ -56,12 +56,19 @@ test("Custom times, midnight windows, and sleep priority are respected", () => {
   assert.equal(getSchedule(date("00:31"), times).id, "sleep");
   assert.equal(getSchedule(date("08:30"), times).id, "wake");
 });
-test("A manual interaction holds for two minutes, then resumes the current schedule", () => {
-  const start = date("12:14"),
+test("A manual interaction holds for five seconds, then resumes the current schedule", () => {
+  const start = new Date("2026-10-19T12:14:57"),
     manual = { action: "heart", until: start.getTime() + MANUAL_HOLD_MS };
   const settings = { auto: true, action: "heart", times: DEFAULT_TIMES };
   assert.equal(getActivity(date("12:15"), settings, manual).mode, "manual");
-  assert.equal(getActivity(date("12:16"), settings, manual).action, "eat");
+  assert.equal(
+    getActivity(new Date(+start + 4999), settings, manual).mode,
+    "manual",
+  );
+  assert.equal(
+    getActivity(new Date(+start + 5000), settings, manual).action,
+    "eat",
+  );
   assert.equal(getActivity(date("14:00"), settings, manual).action, "read");
   assert.equal(
     getActivity(date("12:16"), { ...settings, auto: false }, manual).action,

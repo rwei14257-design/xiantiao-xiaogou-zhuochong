@@ -77,7 +77,7 @@ function release(e, cancelled = false) {
   window.puppy.drag("end");
   if (img.hasPointerCapture(e.pointerId))
     img.releasePointerCapture(e.pointerId);
-  if (clicked) window.puppy.action(state.action === "heart" ? "good" : "heart");
+  if (clicked) window.puppy.react(state.action === "heart" ? "good" : "heart");
 }
 img.addEventListener("pointerup", (e) => release(e));
 img.addEventListener("pointercancel", (e) => release(e, true));
@@ -92,11 +92,11 @@ document.addEventListener("contextmenu", (e) => {
   window.puppy.menu();
 });
 document.querySelector("#home").onclick = () => window.puppy.panel();
-document.querySelector("#love").onclick = () => window.puppy.action("heart");
+document.querySelector("#love").onclick = () => window.puppy.react("heart");
 document.querySelector("#more").onclick = () => window.puppy.menu();
 img.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
-    window.puppy.action("heart");
+    window.puppy.react("heart");
   }
 });

@@ -121,13 +121,15 @@ test("Fixed actions still refresh upcoming events; ticks reuse the current minut
 test("Manual mode expires inside a minute and broadcasts one shared snapshot", () => {
   const app = boot();
   app.run("pet = testWindow; panel = testWindow; action('heart'); tick()");
-  app.at("10:31:29");
+  app.at("10:29:34");
+  app.run("action('good', true)");
+  app.at("10:29:38");
   app.run("tick()");
   assert.equal(app.messages.at(-1).activity.mode, "manual");
-  app.at("10:31:30");
+  app.at("10:29:39");
   app.run("tick()");
   assert.equal(app.messages.at(-1).activity.mode, "schedule");
-  assert.equal(app.messages.at(-1).action, "drink");
+  assert.equal(app.messages.at(-1).action, "read");
   assert.equal(app.messages.at(-1), app.messages.at(-2));
 });
 
@@ -141,4 +143,16 @@ test("Pausing the schedule keeps the visible action instead of an old selection"
     "updateSettings({auto:true}); action('heart'); updateSettings({auto:false})",
   );
   assert.equal(app.messages.at(-1).action, "heart");
+});
+
+test("Petting a fixed pet restores its selected action after five seconds", () => {
+  const app = boot();
+  app.run(
+    "pet=testWindow; state.auto=false; action('sleep'); action('heart',true)",
+  );
+  assert.equal(app.messages.at(-1).action, "heart");
+  app.at("10:29:35");
+  app.run("tick()");
+  assert.equal(app.messages.at(-1).action, "sleep");
+  assert.equal(app.messages.at(-1).activity.mode, "fixed");
 });

@@ -14,7 +14,7 @@ const TIME_LABELS = {
   dinner: "晚餐",
   bedtime: "睡觉",
 };
-const MANUAL_HOLD_MS = 2 * 60 * 1000;
+const MANUAL_HOLD_MS = 5 * 1000;
 function minutes(value) {
   const [h, m] = value.split(":").map(Number);
   return h * 60 + m;
@@ -213,6 +213,18 @@ function getSchedule(date, times) {
 }
 function getActivity(date, settings, manual = null) {
   const scheduled = getSchedule(date, settings.times);
+  if (manual && Number.isFinite(manual.until) && date.getTime() < manual.until)
+    return {
+      ...scheduled,
+      action: manual.action,
+      id: "manual",
+      key: `manual:${manual.action}:${manual.until}`,
+      title: settings.auto
+        ? "互动中 · 稍后回到作息"
+        : "互动中 · 稍后回到固定动作",
+      mode: "manual",
+      until: manual.until,
+    };
   if (!settings.auto)
     return {
       ...scheduled,
@@ -222,16 +234,6 @@ function getActivity(date, settings, manual = null) {
       title: "固定动作",
       mode: "fixed",
       until: null,
-    };
-  if (manual && Number.isFinite(manual.until) && date.getTime() < manual.until)
-    return {
-      ...scheduled,
-      action: manual.action,
-      id: "manual",
-      key: `manual:${manual.action}:${manual.until}`,
-      title: "互动中 · 稍后回到作息",
-      mode: "manual",
-      until: manual.until,
     };
   return { ...scheduled, mode: "schedule", until: null };
 }

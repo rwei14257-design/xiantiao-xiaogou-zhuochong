@@ -44,7 +44,7 @@ const cards = actions
   .join("");
 fs.writeFileSync(
   path.join(root, "docs/images/states.svg"),
-  `<svg xmlns="http://www.w3.org/2000/svg" width="1136" height="780" viewBox="0 0 1136 780"><style>text{font-family:"Microsoft YaHei",sans-serif}.title{fill:#4e6244;font-size:18px;font-weight:600}.text{fill:#7b866e;font-size:13px}.small{fill:#a1a88f;font-size:11px}</style><rect width="1136" height="780" rx="24" fill="#f5f5ed"/><text x="40" y="57" fill="#45563c" font-size="30" font-family="sans-serif">线条小狗的 12 种日常状态</text><text x="42" y="90" class="text">状态图鉴 · 这些图标用于说明功能，不是替代萌宠，也不是随附的角色动画。</text><text x="42" y="115" class="small">按时间陪伴 / 手动互动 / 两分钟后回到作息 / 本地素材导入</text>${cards}</svg>\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1136" height="780" viewBox="0 0 1136 780"><style>text{font-family:"Microsoft YaHei",sans-serif}.title{fill:#4e6244;font-size:18px;font-weight:600}.text{fill:#7b866e;font-size:13px}.small{fill:#a1a88f;font-size:11px}</style><rect width="1136" height="780" rx="24" fill="#f5f5ed"/><text x="40" y="57" fill="#45563c" font-size="30" font-family="sans-serif">线条小狗的 12 种日常状态</text><text x="42" y="90" class="text">状态图鉴 · 这些图标用于说明功能，不是替代萌宠，也不是随附的角色动画。</text><text x="42" y="115" class="small">按时间陪伴 / 手动互动 / 5 秒后回到作息 / 本地素材导入</text>${cards}</svg>\n`,
 );
 const points = [
   ["07:30", "早安见面"],

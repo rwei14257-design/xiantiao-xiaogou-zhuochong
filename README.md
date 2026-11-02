@@ -20,11 +20,11 @@
 
 ## 下载与安装
 
-| 设备 | v1.1.5 安装包 |
+| 设备 | v1.1.6 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.5/happy-dog-1.1.5-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
@@ -36,7 +36,7 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 
 - **跟随作息**：起床、早餐、午餐、午休、喝水、下班、晚餐、睡前放松、夜间睡眠。
 - **六个时间自己定**：在小屋调整起床、三餐、下班、睡觉时间，保存后立即生效。
-- **互动之后回到生活**：手动选择动作后保留 2 分钟，再回到当前时间应有的状态；也可以点「回到作息」。关闭作息开关后固定播放选中的状态。
+- **互动之后回到生活**：手动选择动作后保留 5 秒，再回到当前时间应有的状态；也可以点「回到作息」。连续点击从最后一次重新计时。关闭作息后，摸小狗也只互动 5 秒，再回到选定的固定动作。
 - **周末节奏**：工作日专注时段安静阅读，周末改为轻松陪伴。
 - **桌面轻陪伴**：透明窗口、拖动、空白区域鼠标穿透、三档大小、置顶、托盘隐藏与唤回。
 - **安装版可换素材**：从文件夹导入 GIF / PNG / WebP，素材保存在用户数据目录，升级不会覆盖。
@@ -52,17 +52,17 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 | 状态 | 默认触发方式 | 行为和恢复规则 | 本地文件名 |
 | --- | --- | --- | --- |
 | 见面摇摇 | 07:30–07:50；日常放松、周末 | 早安问候，其他时间轻松陪伴 | `hello.gif` |
-| 给你爱心 | 点击小狗、爱心按钮或状态卡 | 陪你互动 2 分钟，再回到作息 | `heart.gif` |
+| 给你爱心 | 点击小狗、爱心按钮或状态卡 | 陪你互动 5 秒，再回到作息 | `heart.gif` |
 | 开心蹦跶 | 工作日专注时段，每小时最后 5 分钟；手动 | 伸展一下，用餐、午休和睡眠优先 | `jump.gif` |
-| 夸夸小狗 | 手动选择；爱心状态下再次点击 | 一句鼓励，2 分钟后恢复 | `good.gif` |
-| 快乐起舞 | 手动选择 | 让小狗开心一下，2 分钟后恢复 | `dance.gif` |
+| 夸夸小狗 | 手动选择；爱心状态下再次点击 | 播放鼓励动作，5 秒后恢复 | `good.gif` |
+| 快乐起舞 | 手动选择 | 让小狗开心一下，5 秒后恢复 | `dance.gif` |
 | 开饭时间 | 08:00–08:30、12:15–12:55、18:45–19:25 | 对应早餐、午餐、晚餐；分别显示问候 | `eat.gif` |
 | 安静陪伴 | 工作日 09:00 至下班时间，其他事件之外 | 安静阅读，让你专心做事 | `read.gif` |
 | 呼呼大睡 | 12:55–13:15 午休；23:15–次日07:30 | 午休随午餐时间移动；夜间睡眠跨午夜 | `sleep.gif` |
 | 喝口水吧 | 10:30–10:40、15:00–15:10 | 温和提醒喝水，随后恢复日常状态 | `drink.gif` |
 | 下班快乐 | 18:00–18:30；手动 | 工作日收工提醒，周末为傍晚放松 | `offwork.gif` |
 | 睡前放松 | 睡觉时间前 30 分钟，默认22:45–23:15 | 慢慢收心，之后进入睡眠 | `sleepy.gif` |
-| 完成庆祝 | 手动选择 | 为完成的事情庆祝，2 分钟后恢复 | `celebrate.gif` |
+| 完成庆祝 | 手动选择 | 为完成的事情庆祝，5 秒后恢复 | `celebrate.gif` |
 
 表中时间是默认值。时间发生重叠时，夜间睡眠、睡前放松、早安、用餐、午休、下班、喝水依次优先；手动互动临时覆盖作息，固定动作模式则暂停自动切换。
 
