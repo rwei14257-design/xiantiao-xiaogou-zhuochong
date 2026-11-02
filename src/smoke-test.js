@@ -154,6 +154,30 @@ module.exports = async function test(api) {
   );
   await wait(150);
   assert.equal(api.snapshot().activity.mode, "schedule");
+  await panel.webContents.executeJavaScript(
+    'document.querySelector("#focus").click()',
+  );
+  await wait(180);
+  assert.equal(api.snapshot().activity.mode, "focus");
+  await panel.webContents.executeJavaScript(
+    'document.querySelector("#surprise").click()',
+  );
+  await wait(180);
+  assert.ok(api.snapshot().activity.effect);
+  assert.equal(
+    await api.pet.webContents.executeJavaScript(
+      'document.querySelector("#stage").dataset.effect',
+    ),
+    api.snapshot().activity.effect,
+  );
+  await panel.webContents.executeJavaScript(
+    'document.querySelector("#focus").click()',
+  );
+  await wait(180);
+  assert.equal(api.snapshot().focusUntil, 0);
+  results.push(
+    "Focus start/stop and surprise particle reactions work through IPC",
+  );
   api.updateSettings({ times: require("./schedule").DEFAULT_TIMES });
   results.push(
     "Custom schedule form saves and resume button returns to current local-time state",
@@ -170,6 +194,38 @@ module.exports = async function test(api) {
     (await api.pet.webContents.capturePage()).toPNG(),
   );
   assert.deepEqual(errors, []);
+  if (process.argv.includes("--capture-guide")) {
+    const client = panel.webContents.debugger;
+    client.attach();
+    try {
+      await client.sendCommand("Emulation.setDeviceMetricsOverride", {
+        width: 1000,
+        height: 2200,
+        deviceScaleFactor: 1.5,
+        mobile: false,
+      });
+      await wait(250);
+      const rect = await panel.webContents.executeJavaScript(
+        '(()=>{const r=document.querySelector(".moods").getBoundingClientRect();return {x:r.left,y:r.top+scrollY,width:r.width,height:r.height}})()',
+      );
+      for (const [name, clip] of [
+        ["home", { x: 0, y: 0, width: 1000, height: Math.floor(rect.y) }],
+        ["states", rect],
+      ]) {
+        const shot = await client.sendCommand("Page.captureScreenshot", {
+          format: "png",
+          captureBeyondViewport: true,
+          clip: { ...clip, scale: 1 },
+        });
+        fs.writeFileSync(
+          path.join(root, "preview-" + name + ".png"),
+          Buffer.from(shot.data, "base64"),
+        );
+      }
+    } finally {
+      client.detach();
+    }
+  }
   fs.writeFileSync(
     path.join(root, "验证结果.json"),
     JSON.stringify(

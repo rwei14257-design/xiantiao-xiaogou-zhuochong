@@ -217,6 +217,7 @@ function getActivity(date, settings, manual = null) {
     return {
       ...scheduled,
       action: manual.action,
+      effect: manual.effect || null,
       id: "manual",
       key: `manual:${manual.action}:${manual.until}`,
       title: settings.auto

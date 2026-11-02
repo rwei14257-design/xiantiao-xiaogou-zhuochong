@@ -30,6 +30,8 @@ nsis:
   shortcutName: happy dog
   deleteAppDataOnUninstall: false
 mac:
+  extendInfo:
+    NSAppleEventsUsageDescription: happy dog 读取音乐播放器的播放或暂停状态，让小狗随音乐跳舞。
   icon: resources/icons/icon.icns
   target:
     - target: dmg

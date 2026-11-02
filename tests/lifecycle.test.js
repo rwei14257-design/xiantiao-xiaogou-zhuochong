@@ -37,6 +37,8 @@ function boot(ownsInstance = true) {
           writeFileSync: (...args) => writes.push(args),
         };
       if (name === "path") return path;
+      if (name === "./media-watch") return { watchMedia: () => () => {} };
+      if (name === "./companion") return require("../src/companion");
       if (name === "./model") return model;
       if (name === "./settings")
         return { writeSettings: (...args) => writes.push(args) };
@@ -155,4 +157,18 @@ test("Petting a fixed pet restores its selected action after five seconds", () =
   app.run("tick()");
   assert.equal(app.messages.at(-1).action, "sleep");
   assert.equal(app.messages.at(-1).activity.mode, "fixed");
+});
+
+test("Focus sessions celebrate once on time and never replay a stale celebration after sleep", () => {
+  const app = boot();
+  app.run("pet=testWindow;focusUntil=Date.now()+1000;tick()");
+  assert.equal(app.messages.at(-1).activity.mode, "focus");
+  app.at("10:29:31");
+  app.run("tick()");
+  assert.equal(app.messages.at(-1).action, "celebrate");
+  app.run("endInteraction();focusUntil=Date.now()+1000");
+  app.at("11:00:00");
+  app.run("tick(true)");
+  assert.equal(app.run("focusUntil"), 0);
+  assert.equal(app.messages.at(-1).activity.mode, "schedule");
 });

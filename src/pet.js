@@ -10,12 +10,16 @@ const hit = hitCanvas.getContext("2d", { willReadFrequently: true });
 let hitPixels = new Uint8ClampedArray(80 * 80 * 4);
 function receive(next) {
   state = next;
+  document.querySelector("#stage").dataset.effect = state.activity.effect || "";
   const current = state.actions.find((a) => a.id === state.action);
   const key = `${state.activity.key}:${state.artworkRevision}`;
   if (lastAction !== key) {
     lastAction = key;
     const source =
-      current.src + (current.supplied ? `?v=${state.artworkRevision}` : "");
+      ((state.activity.effect && current.variantSrc) || current.src) +
+      (current.supplied || (state.activity.effect && current.variantSrc)
+        ? `?v=${state.artworkRevision}`
+        : "");
     if (img.src !== source) {
       hitPixels.fill(0);
       img.src = source;

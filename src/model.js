@@ -16,6 +16,7 @@ const actions = [
 const defaults = {
   size: 220,
   topmost: true,
+  music: true,
   auto: true,
   action: "hello",
   position: null,
@@ -24,6 +25,7 @@ function normalize(input = {}) {
   if (!input || typeof input !== "object") input = {};
   return {
     size: [160, 220, 300].includes(input.size) ? input.size : defaults.size,
+    music: typeof input.music === "boolean" ? input.music : defaults.music,
     topmost:
       typeof input.topmost === "boolean" ? input.topmost : defaults.topmost,
     auto: typeof input.auto === "boolean" ? input.auto : defaults.auto,

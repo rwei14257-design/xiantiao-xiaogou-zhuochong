@@ -10,21 +10,27 @@
 
 [下载安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest) · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
 
-[![导入线条小狗后的真实小屋界面](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png)
+[![导入线条小狗后的真实小屋界面](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-home.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-home.png)
 
 截图展示的是已导入本地线条小狗素材的应用，下载后需自行导入才能获得同样的角色效果。截图中的角色形象归相应权利人所有，**不属于本项目 MIT 授权范围**；项目未取得角色公开展示或再分发授权，也不将截图展示视为已获授权。详见 [截图来源与权利说明](docs/screenshots.md)。
 
 [![小狗的一天：默认作息时间线](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/day-rhythm.svg)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/day-rhythm.svg)
 
-图片未显示时，可直接打开：[小屋大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-home.png) · [12 种状态大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)。
+图片未显示时，可直接打开：[小屋大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-home.png) · [12 种状态大图](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-states.png)。
+
+## 小屋里的新玩法
+
+- **音乐舞池**：开启「跟随播放」和自动作息，播放器播放时跳舞，暂停后恢复。Windows 读取系统媒体会话；有的浏览器或视频播放器不会标注媒体类型，有的播放器不报告状态。Mac 查询正在运行的 Music 或 Spotify，可能需要在系统设置中允许自动化。此功能不录音、不读取歌名，不按 BPM 分析节拍。
+- **专注搭子**：一起安静阅读 25 分钟，可提前结束；自然结束时播放庆祝动作。计时限本次运行。
+- **惊喜表情**：随机抽取爱心泡泡、流星跳跃、彩纸庆祝或闪光舞步，连续两次不重复。可额外导入 `surprise-hearts.gif`、`surprise-stars.gif`、`surprise-confetti.gif` 和 `surprise-beats.gif`（也支持 PNG/WebP）；缺少这些表情时，在常规动作上叠加粒子效果。点击互动仍保持 5 秒。
 
 ## 下载与安装
 
-| 设备 | v1.1.6 安装包 |
+| 设备 | v1.2.0 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.1.6/happy-dog-1.1.6-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.2.0/happy-dog-1.2.0-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.2.0/happy-dog-1.2.0-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.2.0/happy-dog-1.2.0-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 
@@ -45,9 +51,9 @@ Windows 暂无可信发布者证书签名；Mac 使用 ad-hoc 签名，尚无 Ap
 
 ## 每个状态会做什么
 
-[![12 种状态对应的线条小狗形态](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@beb61afe317177979ca3a4abba6c1e8b8d66885f/docs/images/preview-states.png)
+[![12 种状态对应的线条小狗形态](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-states.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-states.png)
 
-每张卡片对应一个实际动作：小狗形态、状态名称、触发时间放在一起。小屋中的 GIF 会播放，以上为旧版静态截图；v1.1.5 起只播放动作，桌面和小屋都不再显示小狗台词；卡片时间会随个人作息设置更新。
+每张卡片对应一个实际动作：小狗形态、状态名称、触发时间放在一起。小屋中的 GIF 会播放，以上为 v1.2.0 实际界面的静态截图；小狗只播放动作，桌面和小屋都不再显示小狗台词；卡片时间会随个人作息设置更新。
 
 | 状态 | 默认触发方式 | 行为和恢复规则 | 本地文件名 |
 | --- | --- | --- | --- |

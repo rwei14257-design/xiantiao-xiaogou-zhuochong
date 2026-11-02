@@ -502,3 +502,94 @@ footer button {
     font-size: 25px;
   }
 }
+
+/* Companion studio */
+:root {
+  --ink: #242727;
+  --green: #394e4b;
+  --muted: #586762;
+  --line: #dfe4e3;
+}
+body {
+  background: #f7f8f8;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei UI",
+    sans-serif;
+  color: var(--ink);
+}
+header {
+  height: 64px;
+}
+.welcome {
+  min-height: 0;
+}
+.portrait {
+  height: 202px;
+}
+.orbit {
+  background: radial-gradient(circle at 35% 20%, #ecf5f2, #dfe7e4);
+  width: 184px;
+  height: 184px;
+}
+.portrait img {
+  width: 186px;
+  height: 186px;
+}
+.studio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.studio-card,
+.day-card,
+.preferences,
+.asset-bar {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.studio-card {
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+.studio-card h2 {
+  font-size: 17px;
+  letter-spacing: -0.04em;
+}
+.studio-card small {
+  font-size: 11px;
+  color: #53615f;
+}
+.studio-control {
+  cursor: pointer;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 999px;
+  background: #edf2f1;
+  padding: 6px 12px;
+  color: #324d46;
+  font-size: 11px;
+}
+.studio-control input {
+  accent-color: #395c50;
+}
+.action-card {
+  background: #fff;
+  border-color: var(--line);
+  border-radius: 16px;
+}
+.primary {
+  border-radius: 999px;
+}
+.spark {
+  display: none;
+}
+.timeline-stop span,
+.timeline-stop strong {
+  color: #50615d;
+}

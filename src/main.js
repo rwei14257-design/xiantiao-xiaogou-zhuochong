@@ -20,6 +20,12 @@ const {
   importArtwork,
 } = require("./artwork");
 const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
+const { watchMedia } = require("./media-watch");
+const {
+  companionActivity,
+  nextSurprise,
+  focusDuration,
+} = require("./companion");
 const { writeSettings } = require("./settings");
 const artifactsPath = path.resolve(__dirname, "../artifacts");
 const smoke = process.argv.includes("--smoke-test");
@@ -76,12 +82,33 @@ function save() {
     }
   }, 150);
 }
+let focusUntil = 0,
+  lastSurprise,
+  stopMedia,
+  media = "starting";
+function syncMedia() {
+  stopMedia?.();
+  stopMedia = null;
+  media = state.music ? "starting" : "off";
+  if (state.music && !smoke)
+    stopMedia = watchMedia((value) => {
+      media = value;
+      publish();
+    });
+}
 function snapshot() {
-  const activity = getActivity(new Date(), state, manual);
+  const activity = companionActivity(getActivity(new Date(), state, manual), {
+    media,
+    music: state.music,
+    focusUntil,
+    now: Date.now(),
+  });
   return {
     ...state,
     action: activity.action,
     activity,
+    media,
+    focusUntil,
     artworkRevision,
     suppliedCount: artwork.filter((a) => a.supplied).length,
     actions: artwork,
@@ -98,11 +125,11 @@ function endInteraction() {
   clearTimeout(interactionTimer);
   manual = null;
 }
-function action(id, reaction = false) {
+function action(id, reaction = false, effect = null) {
   if (!actions.some((a) => a.id === id)) return snapshot();
   endInteraction();
   if (state.auto || reaction) {
-    manual = { action: id, until: Date.now() + MANUAL_HOLD_MS };
+    manual = { action: id, effect, until: Date.now() + MANUAL_HOLD_MS };
     interactionTimer = setTimeout(() => {
       endInteraction();
       publish();
@@ -153,7 +180,7 @@ function hidePet() {
 function updateSettings(patch) {
   if (!patch || typeof patch !== "object") return snapshot();
   const safe = Object.fromEntries(
-    ["size", "auto", "topmost", "times"]
+    ["size", "auto", "topmost", "times", "music"]
       .filter((k) => k in patch)
       .map((k) => [k, patch[k]]),
   );
@@ -165,7 +192,9 @@ function updateSettings(patch) {
       ...state.times,
       ...(safe.times && typeof safe.times === "object" ? safe.times : {}),
     };
+  const previousMusic = state.music;
   state = normalize({ ...state, ...safe });
+  if (state.music !== previousMusic) syncMedia();
   if ("auto" in safe || "times" in safe) endInteraction();
   if (old !== state.size) {
     const b = pet.getBounds();
@@ -249,6 +278,15 @@ function resumeSchedule() {
 function tick(force = false) {
   if (!pet || pet.isDestroyed() || dragTimer) return;
   const now = Date.now();
+  if (focusUntil && now >= focusUntil) {
+    const timely = now - focusUntil < 60000;
+    focusUntil = 0;
+    if (timely && !(manual && manual.until > now)) {
+      action("celebrate", true, "confetti");
+      return;
+    }
+    force = true;
+  }
   const minute = Math.floor(now / 60000);
   const expired = manual && now >= manual.until;
   if (!force && minute === lastTickMinute && !expired) return;
@@ -325,6 +363,21 @@ function trusted(event) {
     (w) => w && !w.isDestroyed() && w.webContents === event.sender,
   );
 }
+ipcMain.handle("surprise", (e) => {
+  if (!trusted(e)) return null;
+  const pick = nextSurprise(lastSurprise);
+  lastSurprise = pick.effect;
+  return action(pick.action, true, pick.effect);
+});
+ipcMain.handle("toggle-focus", (e) => {
+  if (!trusted(e)) return null;
+  if (focusUntil) focusUntil = 0;
+  else {
+    focusUntil = Date.now() + focusDuration;
+  }
+  publish();
+  return snapshot();
+});
 ipcMain.handle("state", (e) => (trusted(e) ? snapshot() : null));
 ipcMain.handle("action", (e, id, reaction) =>
   trusted(e) ? action(id, reaction === true) : null,
@@ -453,6 +506,7 @@ else {
         save();
       });
       tick();
+      syncMedia();
       autoTimer = setInterval(tick, 1000);
       powerMonitor.on("resume", () => {
         endInteraction();
@@ -493,6 +547,7 @@ app.on("before-quit", () => {
   if (!ownsInstance) return;
   quitting = true;
   endInteraction();
+  stopMedia?.();
   clearInterval(autoTimer);
   clearInterval(dragTimer);
   clearTimeout(saveTimer);

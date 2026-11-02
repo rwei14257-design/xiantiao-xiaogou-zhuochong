@@ -1,0 +1,98 @@
+.fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+.fx i {
+  display: none;
+  position: absolute;
+  left: 18%;
+  bottom: 18%;
+  width: 10px;
+  height: 10px;
+  background: var(--particle);
+  animation: drift 1.45s ease-out infinite;
+}
+.fx i:nth-child(2) {
+  left: 70%;
+  bottom: 12%;
+  animation-delay: -0.65s;
+}
+.fx i:nth-child(3) {
+  left: 28%;
+  bottom: 40%;
+  animation-delay: -0.9s;
+}
+.fx i:nth-child(4) {
+  left: 80%;
+  bottom: 45%;
+  animation-delay: -0.35s;
+}
+[data-effect="hearts"] {
+  --particle: #e47890;
+}
+[data-effect="stars"] {
+  --particle: #d5a646;
+}
+[data-effect="confetti"] {
+  --particle: #7aaca4;
+}
+[data-effect="beats"] {
+  --particle: #9d8bd4;
+}
+[data-effect]:not([data-effect=""]) > .fx i {
+  display: block;
+}
+[data-effect="hearts"] > .fx i {
+  clip-path: polygon(
+    50% 95%,
+    0 43%,
+    0 20%,
+    25% 8%,
+    50% 22%,
+    75% 8%,
+    100% 20%,
+    100% 43%
+  );
+}
+[data-effect="stars"] > .fx i {
+  clip-path: polygon(
+    50% 0,
+    60% 38%,
+    100% 50%,
+    60% 62%,
+    50% 100%,
+    40% 62%,
+    0 50%,
+    40% 38%
+  );
+}
+[data-effect="beats"] > .fx i {
+  width: 4px;
+  height: 17px;
+  border-radius: 3px;
+}
+[data-effect="confetti"] > .fx i:nth-child(even) {
+  background: #efaf65;
+}
+@keyframes drift {
+  from {
+    transform: translateY(8px) rotate(-12deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  to {
+    transform: translateY(-38px) rotate(28deg);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx i {
+    animation: none;
+    opacity: 0.65;
+  }
+}

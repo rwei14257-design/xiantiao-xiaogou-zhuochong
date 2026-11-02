@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("puppy", {
+  surprise: () => ipcRenderer.invoke("surprise"),
+  toggleFocus: () => ipcRenderer.invoke("toggle-focus"),
   getState: () => ipcRenderer.invoke("state"),
   react: (id) => ipcRenderer.invoke("action", id, true),
   action: (id) => ipcRenderer.invoke("action", id),

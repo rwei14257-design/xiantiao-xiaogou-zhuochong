@@ -4,6 +4,7 @@ const { pathToFileURL } = require("node:url");
 const { actions } = require("./model");
 const localRoot = path.resolve(__dirname, "../assets-local");
 const extensions = ["gif", "png", "webp"];
+const { surprises } = require("./companion");
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 function usableArtwork(candidate, ext) {
   let descriptor;
@@ -22,6 +23,10 @@ function usableArtwork(candidate, ext) {
   }
 }
 const ALIASES = {
+  "surprise-hearts": ["520"],
+  "surprise-stars": ["scroll"],
+  "surprise-confetti": ["521"],
+  "surprise-beats": ["music"],
   hello: ["turn on"],
   dance: ["music-dance"],
   eat: ["mealtime"],
@@ -33,23 +38,32 @@ const ALIASES = {
 };
 function resolveArtwork(id, root = localRoot) {
   if (!actions.some((a) => a.id === id)) throw new Error("未知动作");
-  for (const directory of Array.isArray(root) ? root : [root]) {
-    for (const ext of extensions) {
-      const candidate = path.join(directory, `${id}.${ext}`);
-      if (usableArtwork(candidate, ext)) return pathToFileURL(candidate).href;
-    }
-  }
-  const illustration = path.join(__dirname, "assets/states", `${id}.svg`);
+  const userFile = findImage(id, root);
+  if (userFile) return userFile;
+  const illustration = path.join(__dirname, "assets/states", id + ".svg");
   return pathToFileURL(
     fs.existsSync(illustration)
       ? illustration
       : path.join(__dirname, "assets/placeholder.svg"),
   ).href;
 }
+function findImage(id, root = localRoot) {
+  for (const directory of Array.isArray(root) ? root : [root]) {
+    for (const ext of extensions) {
+      const candidate = path.join(directory, `${id}.${ext}`);
+      if (usableArtwork(candidate, ext)) return pathToFileURL(candidate).href;
+    }
+  }
+  return null;
+}
 function withArtwork(roots) {
   return actions.map((a) => {
     const src = resolveArtwork(a.id, roots);
-    return { ...a, src, supplied: !src.endsWith(".svg") };
+    const scene = surprises.find((s) => s.action === a.id);
+    const variantSrc = scene
+      ? findImage("surprise-" + scene.effect, roots)
+      : null;
+    return { ...a, src, variantSrc, supplied: !src.endsWith(".svg") };
   });
 }
 function isImage(bytes, ext) {
@@ -68,7 +82,10 @@ function importArtwork(source, destination) {
     return { imported: [], skipped: [], unchanged: true };
   const plan = [],
     skipped = [];
-  for (const action of actions) {
+  for (const action of [
+    ...actions,
+    ...surprises.map((s) => ({ id: "surprise-" + s.effect })),
+  ]) {
     let found = false;
     for (const name of [action.id, ...(ALIASES[action.id] || [])]) {
       for (const ext of extensions) {

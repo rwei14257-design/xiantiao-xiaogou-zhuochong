@@ -9,6 +9,7 @@
     />
     <title>happy dog · 小狗的小屋</title>
     <link rel="stylesheet" href="panel.css" />
+    <link rel="stylesheet" href="effects.css" />
   </head>
   <body>
     <div class="app">
@@ -28,19 +29,45 @@
       <main>
         <section class="welcome">
           <div>
-            <div class="eyebrow">A DAY WITH YOUR LITTLE FRIEND</div>
-            <h1>把平凡的一天，<br />过成小狗的日常<span>。</span></h1>
+            <div class="eyebrow">TODAY · HAPPY DOG</div>
+            <h1>今天，一起<span>。</span></h1>
             <button class="primary" id="greet">摸摸小狗 <span>♡</span></button>
             <button class="text-button" id="resume">回到作息 ↺</button>
           </div>
           <div class="portrait">
             <div class="orbit"></div>
+            <div class="fx" aria-hidden="true">
+              <i></i><i></i><i></i><i></i>
+            </div>
             <span class="spark one">✧</span><span class="spark two">✧</span
             ><img
               id="hero"
               src="assets/placeholder.svg"
               alt="待添加本地素材"
             /><span class="pet-label" id="current">见面摇摇</span>
+          </div>
+        </section>
+        <section class="studio" aria-label="陪伴玩法">
+          <div class="studio-card">
+            <span class="eyebrow">01 / SOUND</span>
+            <h2>音乐舞池</h2>
+            <small id="media-status">读取播放状态</small
+            ><label class="studio-control"
+              ><input id="music" type="checkbox" role="switch" />
+              跟随播放</label
+            >
+          </div>
+          <div class="studio-card">
+            <span class="eyebrow">02 / FOCUS</span>
+            <h2>专注搭子</h2>
+            <small id="focus-status">一起安静待 25 分钟</small
+            ><button id="focus" class="studio-control">开始专注</button>
+          </div>
+          <div class="studio-card">
+            <span class="eyebrow">03 / PLAY</span>
+            <h2>惊喜表情</h2>
+            <small>四款动效，每次换一款</small
+            ><button id="surprise" class="studio-control">抽一个</button>
           </div>
         </section>
         <section class="day-card" aria-label="小狗的每日作息">

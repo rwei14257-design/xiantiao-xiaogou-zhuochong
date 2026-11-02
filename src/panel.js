@@ -9,7 +9,31 @@ const timeLabels = {
   dinner: "晚餐",
   bedtime: "睡觉",
 };
+let focusEnds = 0;
+function showFocusClock() {
+  document.querySelector("#focus-status").textContent = focusEnds
+    ? "剩余 " +
+      Math.max(0, Math.ceil((focusEnds - Date.now()) / 60000)) +
+      " 分钟"
+    : "一起安静待 25 分钟";
+}
+setInterval(showFocusClock, 1000);
 function receive(state) {
+  focusEnds = state.focusUntil;
+  showFocusClock();
+  document.querySelector(".portrait").dataset.effect =
+    state.activity.effect || "";
+  document.querySelector("#focus").textContent = focusEnds
+    ? "结束专注"
+    : "开始专注";
+  document.querySelector("#music").checked = state.music;
+  document.querySelector("#media-status").textContent = {
+    off: "联动已关闭",
+    idle: "等待播放器",
+    playing: "检测到播放",
+    starting: "正在连接播放器",
+    unavailable: "暂时无法读取播放器",
+  }[state.media];
   if (!initialized) {
     initialized = true;
     for (const action of state.actions) {
@@ -45,12 +69,17 @@ function receive(state) {
   const current = state.actions.find((a) => a.id === state.action),
     hero = document.querySelector("#hero");
   if (
+    hero.dataset.effect !== (state.activity.effect || "") ||
     hero.dataset.action !== current.id ||
     displayedRevision !== state.artworkRevision
   ) {
     hero.src =
-      current.src + (current.supplied ? `?v=${state.artworkRevision}` : "");
+      ((state.activity.effect && current.variantSrc) || current.src) +
+      (current.supplied || (state.activity.effect && current.variantSrc)
+        ? `?v=${state.artworkRevision}`
+        : "");
     hero.dataset.action = current.id;
+    hero.dataset.effect = state.activity.effect || "";
   }
   document.querySelector("#current").textContent = current.name;
   hero.alt = `${current.name}的小狗形态`;
@@ -84,7 +113,11 @@ function receive(state) {
       ? state.activity.timeLabel
       : state.activity.mode === "manual"
         ? "5 秒后恢复原状态"
-        : "选择一个喜欢的动作，一直陪着你";
+        : state.activity.mode === "music"
+          ? "随播放器状态切换"
+          : state.activity.mode === "focus"
+            ? "专注结束后播放庆祝动作"
+            : "选择一个喜欢的动作，一直陪着你";
   document.querySelector("#next-event").textContent =
     `${state.activity.next.tomorrow ? "明天 " : ""}${state.activity.next.time} ${state.activity.next.title}`;
   document.querySelector("#mode-label").textContent =
@@ -93,7 +126,9 @@ function receive(state) {
       : state.activity.weekend
         ? "周末节奏 · 系统本地时间"
         : "工作日节奏 · 系统本地时间";
-  document.querySelector("#resume").hidden = state.activity.mode === "schedule";
+  document.querySelector("#resume").hidden = !["manual", "fixed"].includes(
+    state.activity.mode,
+  );
   const timeline = document.querySelector("#timeline");
   const timelineKey = JSON.stringify(state.activity.timeline);
   if (timelineKey !== displayedTimeline) {
@@ -186,3 +221,8 @@ document.querySelector("#open-assets").onclick = async () => {
   if (result.error)
     document.querySelector("#asset-message").textContent = result.error;
 };
+
+document.querySelector("#surprise").onclick = () => window.puppy.surprise();
+document.querySelector("#focus").onclick = () => window.puppy.toggleFocus();
+document.querySelector("#music").onchange = (e) =>
+  window.puppy.settings({ music: e.target.checked });
