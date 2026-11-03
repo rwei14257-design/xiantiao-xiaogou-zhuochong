@@ -35,6 +35,9 @@ jobs:
       - run: npm test
       - run: npm run check:release
       - run: node scripts/build-input.js
+      - name: Verify Windows shortcut mapping
+        if: runner.os == 'Windows'
+        run: ./build-input/happy-input.exe --self-test
       - name: Build official-runtime package
         run: npx electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
         env:

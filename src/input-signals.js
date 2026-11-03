@@ -2,6 +2,7 @@ const fs = require("fs"),
   path = require("path"),
   { spawn } = require("child_process");
 const gestures = {
+  save: "good",
   send: "heart",
   delete: "good",
   undo: "hello",

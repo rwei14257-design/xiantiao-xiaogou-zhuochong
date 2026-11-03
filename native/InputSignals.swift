@@ -13,9 +13,11 @@ func emit(_ name: String) {
 }
 guard let monitor = NSEvent.addGlobalMonitorForEvents(matching:[.scrollWheel,.keyDown], handler:{ event in
  if event.type == .scrollWheel { emit("scroll");return }
+ guard !event.isARepeat else { return }
  switch event.keyCode {
  case 36,76: emit("send")
  case 51,117: emit("delete")
+ case 1 where event.modifierFlags.contains(.command): emit("save")
  case 6 where event.modifierFlags.contains(.command): emit("undo")
  default: break
  }

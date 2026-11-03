@@ -108,7 +108,7 @@ img.addEventListener("keydown", (e) => {
     e.key === "Enter" ||
     e.key === "Delete" ||
     e.key === "Backspace" ||
-    ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z")
+    ((e.ctrlKey || e.metaKey) && ["z", "s"].includes(e.key.toLowerCase()))
   ) {
     e.preventDefault();
     window.puppy.gesture(
@@ -116,7 +116,9 @@ img.addEventListener("keydown", (e) => {
         ? "send"
         : e.key.toLowerCase() === "z"
           ? "undo"
-          : "delete",
+          : e.key.toLowerCase() === "s"
+            ? "save"
+            : "delete",
     );
     return;
   }

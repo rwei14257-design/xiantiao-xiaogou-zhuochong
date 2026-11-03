@@ -23,7 +23,7 @@ function receive(state) {
   document.querySelector("#input-status").textContent = {
     off: "默认关闭，仅桌宠内响应",
     starting: "正在连接",
-    ready: "已启用：滚轮、回车、撤销、删除",
+    ready: "已启用：滚轮、回车、保存、撤销、删除",
     unavailable: "监听器不可用；Mac 请检查输入监控权限后重新开启",
   }[state.inputStatus];
   document.querySelector("#reference-daily").checked = state.referenceDaily;
