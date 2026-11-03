@@ -34,6 +34,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run check:release
+      - run: node scripts/build-input.js
       - name: Build official-runtime package
         run: npx electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
         env:

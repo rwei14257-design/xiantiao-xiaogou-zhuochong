@@ -75,3 +75,8 @@ button:hover {
 button:focus-visible {
   outline: 2px solid #718069;
 }
+
+#scale {
+  cursor: nwse-resize;
+  touch-action: none;
+}

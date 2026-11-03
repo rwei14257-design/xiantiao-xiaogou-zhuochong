@@ -37,6 +37,8 @@ function boot(ownsInstance = true) {
           writeFileSync: (...args) => writes.push(args),
         };
       if (name === "path") return path;
+      if (name === "./input-signals")
+        return { gestures: { task: "celebrate" }, watchInput: () => () => {} };
       if (name === "./media-watch") return { watchMedia: () => () => {} };
       if (name === "./companion") return require("../src/companion");
       if (name === "./model") return model;

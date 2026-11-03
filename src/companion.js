@@ -9,8 +9,44 @@ function nextSurprise(previous, random = Math.random) {
   const pool = surprises.filter((s) => s.effect !== previous);
   return pool[Math.floor(random() * pool.length)];
 }
-function companionActivity(base, { media, music, focusUntil, now }) {
+function companionActivity(
+  base,
+  {
+    media,
+    music,
+    focusUntil,
+    now,
+    auto = true,
+    hovering = false,
+    dragging = false,
+  },
+) {
   if (base.mode === "manual") return base;
+  const d = new Date(now);
+  if (
+    auto &&
+    [5, 17].includes(d.getHours()) &&
+    [20, 21].includes(d.getMinutes())
+  ) {
+    const first = d.getMinutes() === 20;
+    return {
+      ...base,
+      mode: "moment",
+      id: "love-minute",
+      key: "moment:" + d.getMinutes(),
+      title: first ? "520 爱心时刻" : "521 庆祝时刻",
+      action: first ? "heart" : "celebrate",
+      effect: first ? "hearts" : "confetti",
+    };
+  }
+  if (dragging)
+    return {
+      ...base,
+      mode: "drag",
+      key: "drag",
+      title: "一起挪个窝",
+      action: "celebrate",
+    };
   if (focusUntil > now)
     return {
       ...base,
@@ -35,6 +71,14 @@ function companionActivity(base, { media, music, focusUntil, now }) {
       title: "随音乐跳舞",
       action: "dance",
       effect: "beats",
+    };
+  if (hovering && base.mode === "schedule" && base.action !== "sleep")
+    return {
+      ...base,
+      mode: "hover",
+      key: "hover",
+      title: "见面蹦一蹦",
+      action: "jump",
     };
   return base;
 }

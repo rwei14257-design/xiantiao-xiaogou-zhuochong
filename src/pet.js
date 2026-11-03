@@ -16,7 +16,9 @@ function receive(next) {
   if (lastAction !== key) {
     lastAction = key;
     const source =
-      ((state.activity.effect && current.variantSrc) || current.src) +
+      (current.gestureSrc?.[state.activity.gesture] ||
+        (state.activity.effect && current.variantSrc) ||
+        current.src) +
       (current.supplied || (state.activity.effect && current.variantSrc)
         ? `?v=${state.artworkRevision}`
         : "");
@@ -61,6 +63,7 @@ document.addEventListener("pointermove", (e) => {
     window.puppy.drag("start");
   }
   const ignore = !pointer && !e.target.closest("button") && !opaqueAt(e);
+  setHover(!pointer && e.target === img && (hover || opaqueAt(e)));
   if (ignore !== lastIgnore) {
     lastIgnore = ignore;
     window.puppy.mouse(ignore);
@@ -68,6 +71,7 @@ document.addEventListener("pointermove", (e) => {
 });
 img.addEventListener("pointerdown", (e) => {
   if (e.button !== 0) return;
+  setHover(false);
   pointer = { x: e.screenX, y: e.screenY };
   moving = false;
   img.setPointerCapture(e.pointerId);
@@ -99,8 +103,72 @@ document.querySelector("#home").onclick = () => window.puppy.panel();
 document.querySelector("#love").onclick = () => window.puppy.react("heart");
 document.querySelector("#more").onclick = () => window.puppy.menu();
 img.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
+  if (e.repeat) return;
+  if (
+    e.key === "Enter" ||
+    e.key === "Delete" ||
+    e.key === "Backspace" ||
+    ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z")
+  ) {
+    e.preventDefault();
+    window.puppy.gesture(
+      e.key === "Enter"
+        ? "send"
+        : e.key.toLowerCase() === "z"
+          ? "undo"
+          : "delete",
+    );
+    return;
+  }
+  if (e.key === " ") {
     e.preventDefault();
     window.puppy.react("heart");
   }
 });
+
+let hover = false;
+function setHover(value) {
+  if (value !== hover) {
+    hover = value;
+    window.puppy.hover(value);
+  }
+}
+img.addEventListener("pointerleave", () => setHover(false));
+window.addEventListener("blur", () => setHover(false));
+let wheelAt = -Infinity;
+img.addEventListener(
+  "wheel",
+  (e) => {
+    if (!opaqueAt(e) || pointer || performance.now() - wheelAt < 250) return;
+    wheelAt = performance.now();
+    window.puppy.gesture("scroll");
+  },
+  { passive: true },
+);
+const grip = document.querySelector("#scale");
+let origin, frame;
+grip.onpointerdown = (e) => {
+  if (e.button !== 0) return;
+  e.preventDefault();
+  origin = { x: e.screenX, y: e.screenY, size: state.size };
+  grip.setPointerCapture(e.pointerId);
+  window.puppy.mouse(false);
+};
+grip.onpointermove = (e) => {
+  if (!origin) return;
+  cancelAnimationFrame(frame);
+  const size =
+    origin.size + Math.round((e.screenX - origin.x + e.screenY - origin.y) / 2);
+  frame = requestAnimationFrame(() => window.puppy.resize(size));
+};
+grip.onlostpointercapture = () => {
+  origin = null;
+};
+grip.onkeydown = (e) => {
+  if (["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"].includes(e.key)) {
+    e.preventDefault();
+    window.puppy.resize(
+      state.size + (["ArrowUp", "ArrowRight"].includes(e.key) ? 10 : -10),
+    );
+  }
+};

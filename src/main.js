@@ -20,6 +20,7 @@ const {
   importArtwork,
 } = require("./artwork");
 const { getActivity, MANUAL_HOLD_MS } = require("./schedule");
+const { watchInput, gestures } = require("./input-signals");
 const { watchMedia } = require("./media-watch");
 const {
   companionActivity,
@@ -96,11 +97,46 @@ function syncMedia() {
       publish();
     });
 }
+let hovering = false,
+  pendingTask = process.argv.includes("--task-complete"),
+  stopInput,
+  inputStatus = "off";
+function gesture(id, passive = false) {
+  if (!Object.hasOwn(gestures, id) || !pet || pet.isDestroyed()) return;
+  if (
+    passive &&
+    (!pet.isVisible() ||
+      !state.auto ||
+      focusUntil ||
+      (manual && manual.gesture !== "scroll") ||
+      getActivity(new Date(), state, null).action === "sleep")
+  )
+    return;
+  action(gestures[id], true, id === "scroll" ? "stars" : null, id);
+}
+function syncInput() {
+  stopInput?.();
+  stopInput = null;
+  inputStatus = state.globalInput ? "starting" : "off";
+  if (state.globalInput && !smoke)
+    stopInput = watchInput(
+      (id) => {
+        if (!BrowserWindow.getFocusedWindow()) gesture(id, true);
+      },
+      (status) => {
+        inputStatus = status;
+        publish();
+      },
+    );
+}
 function snapshot() {
   const activity = companionActivity(getActivity(new Date(), state, manual), {
     media,
     music: state.music,
     focusUntil,
+    auto: state.auto,
+    hovering,
+    dragging: Boolean(dragTimer),
     now: Date.now(),
   });
   return {
@@ -110,6 +146,7 @@ function snapshot() {
     media,
     focusUntil,
     artworkRevision,
+    inputStatus,
     suppliedCount: artwork.filter((a) => a.supplied).length,
     actions: artwork,
     visible: Boolean(pet?.isVisible()),
@@ -125,11 +162,16 @@ function endInteraction() {
   clearTimeout(interactionTimer);
   manual = null;
 }
-function action(id, reaction = false, effect = null) {
+function action(id, reaction = false, effect = null, gestureId = null) {
   if (!actions.some((a) => a.id === id)) return snapshot();
   endInteraction();
   if (state.auto || reaction) {
-    manual = { action: id, effect, until: Date.now() + MANUAL_HOLD_MS };
+    manual = {
+      action: id,
+      effect,
+      gesture: gestureId,
+      until: Date.now() + MANUAL_HOLD_MS,
+    };
     interactionTimer = setTimeout(() => {
       endInteraction();
       publish();
@@ -173,14 +215,23 @@ function showPet() {
   publish();
 }
 function hidePet() {
+  hovering = false;
   stopDrag();
   pet.hide();
   publish();
 }
-function updateSettings(patch) {
+function updateSettings(patch, anchor = false) {
   if (!patch || typeof patch !== "object") return snapshot();
   const safe = Object.fromEntries(
-    ["size", "auto", "topmost", "times", "music"]
+    [
+      "size",
+      "auto",
+      "topmost",
+      "times",
+      "music",
+      "globalInput",
+      "referenceDaily",
+    ]
       .filter((k) => k in patch)
       .map((k) => [k, patch[k]]),
   );
@@ -192,20 +243,28 @@ function updateSettings(patch) {
       ...state.times,
       ...(safe.times && typeof safe.times === "object" ? safe.times : {}),
     };
+  const previousTopmost = state.topmost;
+  const previousInput = state.globalInput;
   const previousMusic = state.music;
   state = normalize({ ...state, ...safe });
+  if (previousInput !== state.globalInput) syncInput();
   if (state.music !== previousMusic) syncMedia();
-  if ("auto" in safe || "times" in safe) endInteraction();
+  if ("auto" in safe || "times" in safe || "referenceDaily" in safe)
+    endInteraction();
   if (old !== state.size) {
     const b = pet.getBounds();
     const next = boundsFor({
-      x: b.x + Math.round((old - state.size) / 2),
-      y: b.y + old - state.size,
+      x: anchor ? b.x : b.x + Math.round((old - state.size) / 2),
+      y: anchor ? b.y : b.y + old - state.size,
     });
     pet.setBounds(next);
     state.position = { x: next.x, y: next.y };
   }
-  pet.setAlwaysOnTop(state.topmost, "floating");
+  if (previousTopmost !== state.topmost)
+    pet.setAlwaysOnTop(
+      state.topmost,
+      process.platform === "win32" ? "pop-up-menu" : "floating",
+    );
   publish();
   save();
   return snapshot();
@@ -258,6 +317,23 @@ function menu() {
     },
     { label: "回到屏幕右下角", click: resetPosition },
     { type: "separator" },
+    {
+      label: "完成任务 · 庆祝",
+      click: () => {
+        showPet();
+        gesture("task");
+      },
+    },
+    {
+      label: "登录时启动",
+      type: "checkbox",
+      checked: app.getLoginItemSettings().openAtLogin,
+      click: (item) => app.setLoginItemSettings({ openAtLogin: item.checked }),
+    },
+    {
+      label: "清理界面缓存",
+      click: () => pet.webContents.session.clearCache().catch(reportError),
+    },
     { label: "退出happy dog", click: () => app.quit() },
   ]);
 }
@@ -352,6 +428,7 @@ function stopDrag() {
   if (!dragTimer) return;
   clearInterval(dragTimer);
   dragTimer = null;
+  publish();
   const b = pet.getBounds(),
     next = boundsFor({ x: b.x, y: b.y });
   pet.setBounds(next);
@@ -423,6 +500,19 @@ ipcMain.on("close-panel", (e) => {
 ipcMain.on("mouse", (e, value) => {
   if (e.sender === pet?.webContents) setMouse(value === true);
 });
+ipcMain.on("hover", (e, value) => {
+  if (e.sender === pet?.webContents && hovering !== (value === true)) {
+    hovering = value === true;
+    publish();
+  }
+});
+ipcMain.on("resize-pet", (e, n) => {
+  if (e.sender === pet?.webContents && Number.isFinite(n))
+    updateSettings({ size: Math.max(120, Math.min(420, Math.round(n))) }, true);
+});
+ipcMain.on("gesture", (e, id) => {
+  if (e.sender === pet?.webContents) gesture(id);
+});
 ipcMain.on("drag", (e, phase) => {
   if (e.sender !== pet?.webContents) return;
   if (phase !== "start") {
@@ -438,17 +528,21 @@ ipcMain.on("drag", (e, phase) => {
     const p = screen.getCursorScreenPoint();
     pet.setPosition(p.x - dragOffset.x, p.y - dragOffset.y, false);
   }, 16);
+  publish();
 });
 const ownsInstance = app.requestSingleInstanceLock();
 if (!ownsInstance) app.quit();
 else {
-  app.on("second-instance", () => {
+  app.on("second-instance", (_event, argv = []) => {
+    const task = argv.includes("--task-complete");
     if (!pet || pet.isDestroyed()) {
-      openOnReady = true;
+      if (task) pendingTask = true;
+      else openOnReady = true;
       return;
     }
     showPet();
-    openPanel();
+    if (task) gesture("task");
+    else openPanel();
   });
   app
     .whenReady()
@@ -479,7 +573,10 @@ else {
       secure(pet);
       if (process.platform === "darwin")
         pet.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-      pet.setAlwaysOnTop(state.topmost, "floating");
+      pet.setAlwaysOnTop(
+        state.topmost,
+        process.platform === "win32" ? "pop-up-menu" : "floating",
+      );
       pet.on("blur", stopDrag);
       pet.on("close", (e) => {
         if (!quitting) {
@@ -497,7 +594,10 @@ else {
       tray.on("click", showPet);
       await pet.loadFile(path.join(__dirname, "pet.html"));
       showPet();
-      if (openOnReady || (!artwork.some((a) => a.supplied) && !smoke))
+      if (pendingTask) {
+        gesture("task");
+        pendingTask = false;
+      } else if (openOnReady || (!artwork.some((a) => a.supplied) && !smoke))
         openPanel();
       screen.on("display-removed", () => {
         const b = boundsFor(state.position);
@@ -505,7 +605,10 @@ else {
         state.position = { x: b.x, y: b.y };
         save();
       });
+      if (!smoke && !manual && state.auto && snapshot().action !== "sleep")
+        action("hello", true);
       tick();
+      syncInput();
       syncMedia();
       autoTimer = setInterval(tick, 1000);
       powerMonitor.on("resume", () => {
@@ -547,6 +650,7 @@ app.on("before-quit", () => {
   if (!ownsInstance) return;
   quitting = true;
   endInteraction();
+  stopInput?.();
   stopMedia?.();
   clearInterval(autoTimer);
   clearInterval(dragTimer);

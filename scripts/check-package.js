@@ -15,6 +15,13 @@ function findArchives(dir) {
 const archives = findArchives("dist");
 if (!archives.length) throw new Error("No packaged application archive found");
 for (const archive of archives) {
+  const helper = path.join(
+    path.dirname(archive),
+    "inputs",
+    process.platform === "win32" ? "happy-input.exe" : "happy-input",
+  );
+  if (!fs.existsSync(helper) || !fs.statSync(helper).size)
+    throw Error("Missing input helper: " + helper);
   const paths = listPackage(archive).map((p) => p.replaceAll("\\", "/"));
   const appIcons = new Set([
     "/src/assets/app-icon.png",

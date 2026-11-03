@@ -19,6 +19,15 @@ function showFocusClock() {
 }
 setInterval(showFocusClock, 1000);
 function receive(state) {
+  document.querySelector("#global-input").checked = state.globalInput;
+  document.querySelector("#input-status").textContent = {
+    off: "默认关闭，仅桌宠内响应",
+    starting: "正在连接",
+    ready: "已启用：滚轮、回车、撤销、删除",
+    unavailable: "监听器不可用；Mac 请检查输入监控权限后重新开启",
+  }[state.inputStatus];
+  document.querySelector("#reference-daily").checked = state.referenceDaily;
+  document.querySelector("#times-form").hidden = state.referenceDaily;
   focusEnds = state.focusUntil;
   showFocusClock();
   document.querySelector(".portrait").dataset.effect =
@@ -69,16 +78,20 @@ function receive(state) {
   const current = state.actions.find((a) => a.id === state.action),
     hero = document.querySelector("#hero");
   if (
+    hero.dataset.gesture !== (state.activity.gesture || "") ||
     hero.dataset.effect !== (state.activity.effect || "") ||
     hero.dataset.action !== current.id ||
     displayedRevision !== state.artworkRevision
   ) {
     hero.src =
-      ((state.activity.effect && current.variantSrc) || current.src) +
+      (current.gestureSrc?.[state.activity.gesture] ||
+        (state.activity.effect && current.variantSrc) ||
+        current.src) +
       (current.supplied || (state.activity.effect && current.variantSrc)
         ? `?v=${state.artworkRevision}`
         : "");
     hero.dataset.action = current.id;
+    hero.dataset.gesture = state.activity.gesture || "";
     hero.dataset.effect = state.activity.effect || "";
   }
   document.querySelector("#current").textContent = current.name;
@@ -97,7 +110,12 @@ function receive(state) {
     document.querySelector(
       `[data-action="${item.id}"] .action-timing`,
     ).textContent =
-      labels[item.id] || entries.map((e) => `${e.time} ${e.title}`).join(" / ");
+      (state.referenceDaily && entries.length
+        ? entries.map((e) => e.time + " " + e.title).join(" / ")
+        : state.referenceDaily && item.id === "hello"
+          ? "空闲陪伴"
+          : labels[item.id]) ||
+      entries.map((e) => `${e.time} ${e.title}`).join(" / ");
   }
   if (displayedRevision !== state.artworkRevision) {
     for (const item of state.actions)
@@ -117,7 +135,9 @@ function receive(state) {
           ? "随播放器状态切换"
           : state.activity.mode === "focus"
             ? "专注结束后播放庆祝动作"
-            : "选择一个喜欢的动作，一直陪着你";
+            : ["hover", "drag", "moment"].includes(state.activity.mode)
+              ? "结束后恢复原作息"
+              : "选择一个喜欢的动作，一直陪着你";
   document.querySelector("#next-event").textContent =
     `${state.activity.next.tomorrow ? "明天 " : ""}${state.activity.next.time} ${state.activity.next.title}`;
   document.querySelector("#mode-label").textContent =
@@ -226,3 +246,9 @@ document.querySelector("#surprise").onclick = () => window.puppy.surprise();
 document.querySelector("#focus").onclick = () => window.puppy.toggleFocus();
 document.querySelector("#music").onchange = (e) =>
   window.puppy.settings({ music: e.target.checked });
+
+document.querySelector("#global-input").onchange = (e) =>
+  window.puppy.settings({ globalInput: e.target.checked });
+
+document.querySelector("#reference-daily").onchange = (e) =>
+  window.puppy.settings({ referenceDaily: e.target.checked });

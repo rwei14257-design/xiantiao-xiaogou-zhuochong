@@ -58,6 +58,20 @@ module.exports = async function test(api) {
     "呼呼大睡",
   );
   api.updateSettings({ auto: true });
+  await api.pet.webContents.executeJavaScript(
+    "window.puppy.resize(237);window.puppy.gesture('undo')",
+  );
+  await wait(160);
+  assert.equal(api.snapshot().size, 237);
+  assert.equal(api.snapshot().activity.gesture, "undo");
+  assert(
+    await api.pet.webContents.executeJavaScript(
+      'document.querySelector("#pet").naturalWidth>0',
+    ),
+  );
+  results.push(
+    "Continuous sizing and gesture playback work through the desktop window",
+  );
   results.push(
     "Click reaction expires and the pet window displays its fixed action again",
   );
@@ -95,6 +109,7 @@ module.exports = async function test(api) {
   assert.equal(api.pet.isAlwaysOnTop(), false);
   assert.equal(api.snapshot().auto, false);
   api.updateSettings({ topmost: true, auto: true });
+  for (let n = 0; n < 20 && !api.pet.isAlwaysOnTop(); n++) await wait(50);
   assert.equal(api.pet.isAlwaysOnTop(), true);
   results.push("Size, always-on-top and preference toggles update");
   api.hidePet();

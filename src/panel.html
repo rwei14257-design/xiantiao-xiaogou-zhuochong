@@ -87,6 +87,10 @@
             <summary>
               调整我的作息时间 <span>6 个时刻，跟着你的生活走</span>
             </summary>
+            <label class="studio-control"
+              ><input id="reference-daily" type="checkbox" />参考作息 ·
+              固定时段</label
+            >
             <form id="times-form">
               <div id="time-inputs" class="time-inputs"></div>
               <div class="schedule-footer">
@@ -129,6 +133,13 @@
             </div>
           </div>
           <div class="toggles">
+            <label
+              ><span
+                >跨应用互动<small id="input-status"
+                  >默认关闭，仅桌宠内响应</small
+                ></span
+              ><input type="checkbox" role="switch" id="global-input"
+            /></label>
             <label
               ><span>跟随每日作息<small>关闭后固定当前选择的动作</small></span
               ><input type="checkbox" id="auto" role="switch" /></label

@@ -15,6 +15,8 @@ const special = new Set([
   ".gitignore",
   ".gitattributes",
   "LICENSE",
+  "native/InputSignals.cs",
+  "native/InputSignals.swift",
   "src/assets/placeholder.svg",
   "docs/images/day-rhythm.svg",
   "docs/images/states.svg",

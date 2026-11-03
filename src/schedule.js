@@ -211,12 +211,56 @@ function getSchedule(date, times) {
     weekend,
   };
 }
+const referenceWindows = [
+  ["rest", 0, 120, "sleep", "深夜熟睡"],
+  ["breakfast", 570, 610, "eat", "早餐时间"],
+  ["read", 630, 640, "read", "晨间阅读"],
+  ["drink", 640, 650, "drink", "喝水休息"],
+  ["lunch", 720, 780, "eat", "午餐时间"],
+  ["offwork", 1080, 1140, "offwork", "下班放松"],
+  ["dinner", 1200, 1260, "eat", "晚餐时间"],
+  ["winddown", 1380, 1440, "sleepy", "夜间困倦"],
+];
+function referenceSchedule(date) {
+  const m = date.getHours() * 60 + date.getMinutes(),
+    timeline = referenceWindows.map(([id, start, end, action, title]) => ({
+      id,
+      time: clock(start),
+      end: clock(end),
+      action,
+      title,
+    }));
+  const active = referenceWindows.find(([, s, e]) => m >= s && m < e);
+  const nextMinute = Math.min(
+    ...referenceWindows.flatMap(([, s, e]) => [s, e]).filter((n) => n > m),
+  );
+  const after = referenceWindows.find(
+    ([, s, e]) => nextMinute % 1440 >= s && nextMinute % 1440 < e,
+  );
+  return {
+    id: active?.[0] || "leisure",
+    key: date.toDateString() + ":" + (active?.[0] || "leisure"),
+    title: active?.[4] || "轻松陪伴",
+    action: active?.[3] || "hello",
+    timeLabel: active ? clock(active[1]) + "–" + clock(active[2]) : "日常陪伴",
+    weekend: [0, 6].includes(date.getDay()),
+    timeline,
+    next: {
+      tomorrow: nextMinute >= 1440,
+      time: clock(nextMinute),
+      title: after?.[4] || "轻松陪伴",
+    },
+  };
+}
 function getActivity(date, settings, manual = null) {
-  const scheduled = getSchedule(date, settings.times);
+  const scheduled = settings.referenceDaily
+    ? referenceSchedule(date)
+    : getSchedule(date, settings.times);
   if (manual && Number.isFinite(manual.until) && date.getTime() < manual.until)
     return {
       ...scheduled,
       action: manual.action,
+      gesture: manual.gesture || null,
       effect: manual.effect || null,
       id: "manual",
       key: `manual:${manual.action}:${manual.until}`,

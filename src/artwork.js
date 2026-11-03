@@ -5,6 +5,12 @@ const { actions } = require("./model");
 const localRoot = path.resolve(__dirname, "../assets-local");
 const extensions = ["gif", "png", "webp"];
 const { surprises } = require("./companion");
+const gestureFiles = {
+  send: "heart",
+  delete: "good",
+  undo: "hello",
+  task: "celebrate",
+};
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 function usableArtwork(candidate, ext) {
   let descriptor;
@@ -23,6 +29,10 @@ function usableArtwork(candidate, ext) {
   }
 }
 const ALIASES = {
+  "gesture-task": ["usageOver3Hours"],
+  "gesture-send": ["send"],
+  "gesture-undo": ["undo"],
+  "gesture-delete": ["delete"],
   "surprise-hearts": ["520"],
   "surprise-stars": ["scroll"],
   "surprise-confetti": ["521"],
@@ -63,7 +73,18 @@ function withArtwork(roots) {
     const variantSrc = scene
       ? findImage("surprise-" + scene.effect, roots)
       : null;
-    return { ...a, src, variantSrc, supplied: !src.endsWith(".svg") };
+    const gestureSrc = Object.fromEntries(
+      Object.entries(gestureFiles)
+        .filter(([, action]) => action === a.id)
+        .map(([id]) => [id, findImage("gesture-" + id, roots)]),
+    );
+    return {
+      ...a,
+      src,
+      variantSrc,
+      gestureSrc,
+      supplied: !src.endsWith(".svg"),
+    };
   });
 }
 function isImage(bytes, ext) {
@@ -84,6 +105,7 @@ function importArtwork(source, destination) {
     skipped = [];
   for (const action of [
     ...actions,
+    ...Object.keys(gestureFiles).map((id) => ({ id: "gesture-" + id })),
     ...surprises.map((s) => ({ id: "surprise-" + s.effect })),
   ]) {
     let found = false;

@@ -24,7 +24,12 @@ const defaults = {
 function normalize(input = {}) {
   if (!input || typeof input !== "object") input = {};
   return {
-    size: [160, 220, 300].includes(input.size) ? input.size : defaults.size,
+    size:
+      Number.isFinite(input.size) && input.size >= 120 && input.size <= 420
+        ? Math.round(input.size)
+        : defaults.size,
+    referenceDaily: input.referenceDaily === true,
+    globalInput: input.globalInput === true,
     music: typeof input.music === "boolean" ? input.music : defaults.music,
     topmost:
       typeof input.topmost === "boolean" ? input.topmost : defaults.topmost,
