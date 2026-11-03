@@ -26,7 +26,7 @@
 - 在「调整我的作息时间」选择参考作息，或继续使用自定义作息。05:20 / 17:20 出现爱心，下一分钟切换庆祝。手动互动仍优先，睡眠不会被音乐打断。
 - 托盘支持登录时启动、清理界面缓存、完成任务庆祝。运行 `"happy dog.exe" --task-complete` 可通知已有桌宠庆祝，不打开第二只小狗。
 
-独立实现对照：[remake1026/desktop-pets](https://github.com/remake1026/desktop-pets)。保留 happy dog 无对白、五秒点击反馈、专注与音乐小屋。
+[逐项对照与验证](docs/reference-v1.3.0.md) · 参考：[remake1026/desktop-pets](https://github.com/remake1026/desktop-pets)。保留 happy dog 无对白、五秒点击反馈、专注与音乐小屋。
 
 ## 小屋里的新玩法
 
