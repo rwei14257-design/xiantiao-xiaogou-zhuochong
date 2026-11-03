@@ -62,7 +62,7 @@ document.addEventListener("pointermove", (e) => {
     moving = true;
     window.puppy.drag("start");
   }
-  const ignore = !pointer && !e.target.closest("button") && !opaqueAt(e);
+  const ignore = !pointer && !opaqueAt(e);
   setHover(!pointer && e.target === img && (hover || opaqueAt(e)));
   if (ignore !== lastIgnore) {
     lastIgnore = ignore;
@@ -99,9 +99,6 @@ document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   window.puppy.menu();
 });
-document.querySelector("#home").onclick = () => window.puppy.panel();
-document.querySelector("#love").onclick = () => window.puppy.react("heart");
-document.querySelector("#more").onclick = () => window.puppy.menu();
 img.addEventListener("keydown", (e) => {
   if (e.repeat) return;
   if (
@@ -143,34 +140,8 @@ img.addEventListener(
   (e) => {
     if (!opaqueAt(e) || pointer || performance.now() - wheelAt < 250) return;
     wheelAt = performance.now();
-    window.puppy.gesture("scroll");
+    if (e.shiftKey) window.puppy.resize(state.size + (e.deltaY < 0 ? 10 : -10));
+    else window.puppy.gesture("scroll");
   },
   { passive: true },
 );
-const grip = document.querySelector("#scale");
-let origin, frame;
-grip.onpointerdown = (e) => {
-  if (e.button !== 0) return;
-  e.preventDefault();
-  origin = { x: e.screenX, y: e.screenY, size: state.size };
-  grip.setPointerCapture(e.pointerId);
-  window.puppy.mouse(false);
-};
-grip.onpointermove = (e) => {
-  if (!origin) return;
-  cancelAnimationFrame(frame);
-  const size =
-    origin.size + Math.round((e.screenX - origin.x + e.screenY - origin.y) / 2);
-  frame = requestAnimationFrame(() => window.puppy.resize(size));
-};
-grip.onlostpointercapture = () => {
-  origin = null;
-};
-grip.onkeydown = (e) => {
-  if (["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"].includes(e.key)) {
-    e.preventDefault();
-    window.puppy.resize(
-      state.size + (["ArrowUp", "ArrowRight"].includes(e.key) ? 10 : -10),
-    );
-  }
-};

@@ -36,7 +36,7 @@ module.exports = async function test(api) {
   }
   assert.equal(
     await api.pet.webContents.executeJavaScript(
-      'document.querySelector("#tools").innerText.trim() === document.body.innerText.trim()',
+      'document.querySelector("button") === null && document.body.innerText.trim() === ""',
     ),
     true,
   );
@@ -44,7 +44,7 @@ module.exports = async function test(api) {
   api.updateSettings({ auto: false });
   api.action("sleep");
   await api.pet.webContents.executeJavaScript(
-    'document.querySelector("#love").click()',
+    'document.querySelector("#pet").dispatchEvent(new KeyboardEvent("keydown",{key:" "}))',
   );
   await wait(100);
   const reaction = api.snapshot().activity;

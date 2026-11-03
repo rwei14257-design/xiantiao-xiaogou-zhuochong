@@ -20,7 +20,7 @@
 
 ## 桌面互动（v1.3.0）
 
-- 悬停在小狗身上会蹦跳，拖动时庆祝，滚轮触发翻滚。右下角 ↘ 可拖动缩放（120–420），也支持方向键微调。
+- 悬停在小狗身上会蹦跳，拖动时庆祝，滚轮触发翻滚。小狗下方不显示按钮栏。按 Shift 滚动可调整大小（120–420），右键可打开小屋或选择大小。
 - 小狗获得焦点后，回车、删除、Ctrl/Cmd+S、Ctrl/Cmd+Z 分别触发送出、删除、夸奖和撤销动画。可导入同名 `send.gif`、`delete.gif`、`undo.gif` 和任务庆祝 `usageOver3Hours.gif`；没有专用素材时沿用基础动作。
 - 「跨应用互动」默认关闭。开启后，本机辅助程序只向桌宠发送预定义的滚轮和按键动作名，不保存输入内容；Mac 可能需要在系统设置中允许输入监控后重新开启。关闭开关即停止辅助程序。
 - 在「调整我的作息时间」选择参考作息，或继续使用自定义作息。05:20 / 17:20 出现爱心，下一分钟切换庆祝。手动互动仍优先，睡眠不会被音乐打断。
@@ -38,11 +38,11 @@
 
 ## 下载与安装
 
-| 设备 | v1.3.0 安装包 |
+| 设备 | v1.3.1 安装包 |
 | --- | --- |
-| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.0/happy-dog-1.3.0-Windows-x64-Setup.exe) |
-| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.0/happy-dog-1.3.0-macOS-arm64.dmg) |
-| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.0/happy-dog-1.3.0-macOS-x64.dmg) |
+| Windows 10 / 11，64 位 | [Windows 安装程序](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.1/happy-dog-1.3.1-Windows-x64-Setup.exe) |
+| Mac，Apple Silicon（M 系列） | [macOS ARM64 DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.1/happy-dog-1.3.1-macOS-arm64.dmg) |
+| Mac，Intel 芯片 | [macOS Intel DMG](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/download/v1.3.1/happy-dog-1.3.1-macOS-x64.dmg) |
 
 安装包由仓库内的 GitHub Actions 在对应平台构建，包含官方 Electron 运行时，不需要另外安装 Node.js。下载前可查看 [构建状态](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/actions/workflows/release.yml)；每次成功发布都附有 `SHA256SUMS.txt`。
 

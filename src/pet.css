@@ -22,7 +22,6 @@ body {
   width: calc(100% - 32px);
   position: relative;
   aspect-ratio: 1;
-  margin-bottom: 24px;
 }
 #pet {
   display: block;
@@ -39,44 +38,4 @@ body {
 #pet:focus-visible {
   outline: 2px dashed #968067;
   border-radius: 50%;
-}
-#tools {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid #e8e2d8;
-  border-radius: 20px;
-  background: #fffdf8f5;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-#stage:hover #tools,
-#stage:focus-within #tools {
-  opacity: 1;
-}
-button {
-  border: 0;
-  width: 29px;
-  height: 25px;
-  border-radius: 13px;
-  background: transparent;
-  color: #756653;
-  cursor: pointer;
-  font-size: 20px;
-  line-height: 20px;
-}
-button:hover {
-  background: #ece7dc;
-}
-button:focus-visible {
-  outline: 2px solid #718069;
-}
-
-#scale {
-  cursor: nwse-resize;
-  touch-action: none;
 }
