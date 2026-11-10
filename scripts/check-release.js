@@ -20,6 +20,8 @@ const special = new Set([
   "src/assets/placeholder.svg",
   "docs/images/day-rhythm.svg",
   "docs/images/states.svg",
+  "docs/images/onboarding-flow.svg",
+  "docs/images/guide-panel-map.svg",
   "docs/images/preview-home.png",
   "docs/images/preview-states.png",
   "src/assets/app-icon.png",

@@ -6,7 +6,8 @@
 | --- | --- | --- |
 | `src/assets/placeholder.svg` | 本次开发以 SVG 基本几何元素编写的缺图提示图标 | 本项目 MIT，限维护者有权授予的权利 |
 | `src/assets/states/*.svg` | 本项目编写的 12 个功能图标，不描画角色 | 随本项目代码 MIT |
-| `docs/images/*.svg` | 本项目生成的作息时间线和状态图鉴，不描画角色 | 随本项目文档 MIT |
+| `docs/images/day-rhythm.svg`、`docs/images/states.svg` | 本项目生成的作息时间线和状态图鉴，不描画角色 | 随本项目文档 MIT |
+| `docs/images/onboarding-flow.svg`、`docs/images/guide-panel-map.svg` | 本项目编写的下载安装流程和小屋控件布局示意，不描绘第三方角色 | 随本项目文档 MIT |
 
 另有 `docs/images/preview-home.png` 与 `docs/images/preview-states.png` 两张真实功能截图，其中含本机导入的线条小狗形态。截图中的角色权利归第三方，公开展示授权尚未确认，不以 MIT 授权。详细来源见 [截图记录](docs/screenshots.md)。安装包不含这些截图或角色动画包；v1.1.3 起包含单独登记的双狗合照应用图标。页面中的房子、爱心等符号使用系统字体，不随仓库分发字体文件。
 

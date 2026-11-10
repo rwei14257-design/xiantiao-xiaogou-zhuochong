@@ -53,3 +53,9 @@ test("Release inspection rejects media, bundles, and local asset folders", () =>
     [],
   );
 });
+
+test("New guide diagrams are narrowly allowed without allowing arbitrary SVG artwork", () => {
+  assert.deepEqual(inspect(["docs/images/onboarding-flow.svg", "docs/images/guide-panel-map.svg"], () => Buffer.from("<svg/>")), []);
+  assert(inspect(["docs/images/unreviewed.svg"], () => Buffer.from("<svg/>")).length > 0);
+  assert(inspect(["docs/images/unknown-character.png"], () => Buffer.from("fake")).length > 0);
+});
