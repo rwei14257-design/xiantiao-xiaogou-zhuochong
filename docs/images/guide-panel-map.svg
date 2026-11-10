@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="660" viewBox="0 0 1120 660" role="img" aria-labelledby="t d">
+<title id="t">小狗的小屋功能位置示意</title><desc id="d">原创建模的小屋界面结构，标明音乐舞池、专注搭子、惊喜表情、每日作息、状态卡与导入本地素材按钮。无第三方角色形象。</desc>
+<rect width="1120" height="660" rx="25" fill="#0f1929"/>
+<text x="38" y="53" font-family="Arial,Microsoft YaHei,sans-serif" font-size="28" font-weight="700" fill="#f8fbff">小狗的小屋 · 主要按钮在哪里？</text>
+<text x="38" y="83" font-family="Arial,Microsoft YaHei,sans-serif" font-size="15" fill="#abbed4">结构与当前 src/panel.html 对应；此图是原创建模的布局示意，不是实际截图。</text>
+<g transform="translate(38 105)">
+<rect width="1044" height="510" rx="24" fill="#f5f7fa" stroke="#7590b0" stroke-width="3"/>
+<rect width="1044" height="62" rx="24" fill="#e8eef6"/>
+<rect x="0" y="44" width="1044" height="18" fill="#e8eef6"/>
+<text x="28" y="40" font-family="Arial,Microsoft YaHei,sans-serif" font-size="23" font-weight="700" fill="#24334c">小狗的小屋</text>
+<text x="790" y="40" font-family="Arial,Microsoft YaHei,sans-serif" font-size="17" fill="#397951">● 陪伴进行中</text>
+<rect x="28" y="83" width="988" height="76" rx="15" fill="#dfe9f5"/>
+<text x="47" y="118" font-family="Arial,Microsoft YaHei,sans-serif" font-size="23" font-weight="700" fill="#1f314a">今天，一起。</text>
+<text x="48" y="145" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="#3c6589">摸摸小狗  ♡        回到作息  ↺</text>
+<rect x="28" y="178" width="312" height="94" rx="14" fill="#d7e8f8"/><rect x="366" y="178" width="312" height="94" rx="14" fill="#d7e8f8"/><rect x="704" y="178" width="312" height="94" rx="14" fill="#d7e8f8"/>
+<g font-family="Arial,Microsoft YaHei,sans-serif" font-size="21" font-weight="700" fill="#23517f"><text x="54" y="214">01 音乐舞池</text><text x="392" y="214">02 专注搭子</text><text x="730" y="214">03 惊喜表情</text></g>
+<g font-family="Arial,Microsoft YaHei,sans-serif" font-size="15" fill="#3b5d7b"><text x="54" y="245">跟随播放</text><text x="392" y="245">开始专注</text><text x="730" y="245">抽一个</text></g>
+<rect x="28" y="291" width="988" height="94" rx="15" fill="#e8edf4"/>
+<text x="49" y="326" font-family="Arial,Microsoft YaHei,sans-serif" font-size="23" font-weight="700" fill="#24334c">每日作息 / 事件时间线</text>
+<text x="49" y="357" font-family="Arial,Microsoft YaHei,sans-serif" font-size="17" fill="#315b80">调整我的作息时间  → 参考作息 / 自定义 6 个时刻 / 保存作息</text>
+<rect x="28" y="399" width="470" height="83" rx="14" fill="#cce6de"/>
+<rect x="520" y="399" width="496" height="83" rx="14" fill="#dce9ff"/>
+<text x="51" y="433" font-family="Arial,Microsoft YaHei,sans-serif" font-size="21" font-weight="700" fill="#215946">12 种日常状态</text>
+<text x="51" y="461" font-family="Arial,Microsoft YaHei,sans-serif" font-size="15" fill="#285f52">点击状态卡片预览动作</text>
+<text x="545" y="433" font-family="Arial,Microsoft YaHei,sans-serif" font-size="21" font-weight="700" fill="#214a82">导入本地素材</text>
+<text x="545" y="461" font-family="Arial,Microsoft YaHei,sans-serif" font-size="15" fill="#345f91">选择有权使用的 GIF / PNG / WebP 文件夹</text>
+</g>
+<text x="39" y="639" font-family="Arial,Microsoft YaHei,sans-serif" font-size="14" fill="#92a9c5">其他设置在小屋页面更下方：小狗大小、跨应用互动、跟随每日作息、始终置顶。</text>
+</svg>
