@@ -8,7 +8,24 @@
 
 非官方 Windows / macOS 桌面陪伴应用。目标萌宠一直是线条小狗；运行用角色图片由使用者自行提供，安装包附带双狗合照应用图标，不附带运行用的角色动画素材。下方展示导入本地素材后的实际效果。
 
-[下载安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest) · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
+**🚀 [五分钟图文上手](docs/USER_GUIDE.md)** · **[下载 Windows / Mac 安装包](https://github.com/rwei14257-design/xiantiao-xiaogou-zhuochong/releases/latest)** · [状态图鉴](#每个状态会做什么) · [素材导入](#把自己的小狗素材放进来) · [版权声明](NOTICE.md)
+
+## 新手快速上手
+
+[![下载 → 导入本地素材 → 设置作息 → 桌面互动](docs/images/onboarding-flow.svg)](docs/USER_GUIDE.md)
+
+**第一次使用只需四步：** 下载对应系统版本 → 在小屋导入有权使用的图片文件夹 → 调整「我的作息时间」→ 与桌面角色互动。
+
+| 操作页面 | 直接学习 |
+| --- | --- |
+| 下载安装、校验文件、首次运行 | [图文指南：安装与启动](docs/USER_GUIDE.md#1-下载与安装) |
+| 角色素材如何命名、导入、排错 | [图文指南：导入本地素材](docs/USER_GUIDE.md#2-首次启动与素材导入) |
+| 音乐舞池、专注搭子、惊喜表情、作息按钮 | [小屋功能位置示意图](docs/images/guide-panel-map.svg) |
+| 鼠标、键盘、托盘与恢复窗口 | [桌面操作与常见问题](docs/USER_GUIDE.md#6-桌面互动和快捷操作) |
+
+> **重要：** 安装包不含第三方角色动画。新手教程的流程图和界面布局图为原创示意，不是含线条小狗形象的真实截图；实际截图与第三方权利边界仍见 [截图说明](docs/screenshots.md)。
+
+
 
 [![导入线条小狗后的真实小屋界面](https://cdn.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-home.png)](https://fastly.jsdelivr.net/gh/rwei14257-design/xiantiao-xiaogou-zhuochong@v1.2.0/docs/images/preview-home.png)
 
