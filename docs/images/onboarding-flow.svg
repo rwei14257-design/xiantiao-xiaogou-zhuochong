@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="340" viewBox="0 0 1080 340" role="img" aria-labelledby="t d">
+<title id="t">happy dog 新手四步上手流程</title><desc id="d">下载应用，导入有使用权的本地素材，设置作息，然后在桌面互动的步骤示意。此图不描绘第三方角色。</desc>
+<rect width="1080" height="340" rx="28" fill="#101b2b"/>
+<text x="44" y="54" font-family="Arial,Microsoft YaHei,sans-serif" font-size="27" font-weight="700" fill="#f4f8ff">happy dog  ·  四步开始使用</text>
+<text x="44" y="85" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="#a9bacf">Windows / macOS  ·  无需额外安装 Node.js  ·  素材只保存在本机</text>
+<g font-family="Arial,Microsoft YaHei,sans-serif" text-anchor="middle">
+<rect x="42" y="119" width="229" height="158" rx="21" fill="#22334a" stroke="#5b789c" stroke-width="2"/>
+<rect x="297" y="119" width="229" height="158" rx="21" fill="#22334a" stroke="#5b789c" stroke-width="2"/>
+<rect x="552" y="119" width="229" height="158" rx="21" fill="#22334a" stroke="#5b789c" stroke-width="2"/>
+<rect x="807" y="119" width="229" height="158" rx="21" fill="#22334a" stroke="#5b789c" stroke-width="2"/>
+<g fill="#84bcff" font-size="37" font-weight="700"><text x="157" y="175">01</text><text x="412" y="175">02</text><text x="667" y="175">03</text><text x="922" y="175">04</text></g>
+<g fill="#fff" font-size="22" font-weight="700"><text x="157" y="218">下载安装包</text><text x="412" y="218">导入本地素材</text><text x="667" y="218">设置每日作息</text><text x="922" y="218">开始桌面互动</text></g>
+<g fill="#c5d4e6" font-size="15"><text x="157" y="247">选择对应的系统版本</text><text x="412" y="247">使用你有权使用的图片</text><text x="667" y="247">六个时间或参考作息</text><text x="922" y="247">点击、拖动、托盘管理</text></g>
+</g>
+<g fill="none" stroke="#86c9ff" stroke-width="5" stroke-linecap="round"><path d="M279 198H287m-7-8 8 8-8 8"/><path d="M534 198h8m-7-8 8 8-8 8"/><path d="M789 198h8m-7-8 8 8-8 8"/></g>
+<text x="44" y="311" font-family="Arial,Microsoft YaHei,sans-serif" font-size="14" fill="#90a3bb">原创操作流程示意图（不含角色素材），不是应用实际截图。</text>
+</svg>
